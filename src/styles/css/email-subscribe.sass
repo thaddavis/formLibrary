@@ -1,0 +1,160 @@
+@import 'common'
+
+.email
+  display: none
+  margin-top: 3.5rem
+  padding: 0 0.5rem
+  @media (max-width: 1200px)
+    margin-top: 2.5rem
+
+.emailMessage, .promoDetails
+  font-size: 0.875rem
+  line-height: 1.25rem
+  font-weight: bold
+  max-width: 33rem
+  @media (max-width: 1200px)
+    font-size: 0.75rem
+
+.emailMessage
+  margin: 0 auto 3rem auto
+  @media (max-width: 1200px)
+    margin-bottom: 1.75rem
+
+.emailContainer
+  display: flex
+  flex-direction: column
+  align-items: center
+  margin-bottom: 6.75rem
+  justify-content: center
+  @media (max-width: 1200px)
+    flex-direction: column
+    margin-bottom: 3.5rem
+    display: block
+
+.emailInput
+  width: 31rem
+  border: none
+  background-color: rgba(0, 0, 0, 0.12)
+  color: white
+  font-weight: 300
+  font-size: 1rem
+  border-radius: 0.25rem
+  outline: none
+  padding: 1rem
+  margin-bottom: 1.375rem
+  &:focus
+    background-color: rgba(255, 255, 255, 0.12)
+  @media (max-width: 1200px)
+    width: 17rem
+    margin-bottom: 0.875rem
+
+.subscribeButton
+  @include button
+  margin-left: 0.5rem
+  @media (max-width: 1200px)
+    margin-left: 0
+    display: inline-block
+
+.error
+  font-weight: 300
+  color: rgba(255, 0, 0, 0.5)
+  line-height: 1rem
+  margin-top: -1.25rem
+  margin-bottom: 0.25rem
+  text-align: center
+
+.promoOffers
+  display: flex
+  margin-bottom: 1.875rem
+  @media (max-width: 1200px)
+    margin-bottom: 0.75rem
+
+.promoText
+  margin-top: 0.125rem
+
+.promoDetails
+  margin-bottom: 2rem
+  @media (max-width: 1200px)
+    margin-bottom: 1rem
+
+.promoDetailsToggle
+  cursor: pointer
+
+.emailLink
+  color: white
+
+.checkbox
+  width: 1.5rem
+  height: 1.5rem
+  background-position: center center
+  background-repeat: no-repeat
+  background-image: url('../../img/unchecked.svg')
+  cursor: pointer
+  position: relative
+  flex: 0 0 1.5rem
+  &::after
+    content: ' '
+    position: absolute
+    width: 1.5rem
+    height: 1.5rem
+    left: 0
+    top: 0
+    background-image: url('../../img/checked.svg')
+    background-position: center center
+    background-repeat: no-repeat
+    opacity: 0
+    transition: opacity 0.125s ease-in-out
+  &[data-checked='true']
+    &::after
+      opacity: 1
+
+.modal
+  position: fixed
+  display: flex
+  align-items: center
+  justify-content: center
+  background-color: rgba(0, 0, 0, 0.5)
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+
+.dialog
+  //background-color: rgba(255, 255, 255, 0.8)
+  border-radius: 0.3125rem
+  overflow: hidden
+
+.dialogTitle
+  font-weight: 300
+  color: black
+  line-height: 1.5
+
+.dialogMessage, .dialogExample
+  font-weight: 300
+  font-size: 0.75rem
+  line-height: 1.5rem
+
+.dialogMessage
+  color: black
+
+.dialogExample
+  color: #646464
+
+.dialogText
+  padding: 1.5rem 2.5rem
+  background-color: rgba(255, 255, 255, 1)
+
+.dialogButton
+  border-top: 0.0625rem solid rgba(127, 127, 127, 1)
+  font-weight: bold
+  font-size: 0.75rem
+  line-height: 1.5rem
+  padding: 0.5rem
+  cursor: pointer
+  color: #7F7F7F
+  background-color: rgba(255, 255, 255, 1)
+  transition: background-color 0.1s ease-in-out
+  &:hover
+    background-color: darken(rgba(255, 255, 255, 1), 10%)
+  &:active
+    background-color: darken(rgba(255, 255, 255, 1), 20%)

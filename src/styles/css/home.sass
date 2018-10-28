@@ -1,0 +1,169 @@
+@import 'common'
+@import 'vars'
+@import 'bubble-carousel-header'
+
+.page
+  @include bubblePage
+
+.carousel
+  background-image: url('../../img/home-header.png')
+  background-position: bottom center
+  @include header
+
+.carouselText
+  font-size: 2.625rem
+  letter-spacing: 0.175rem
+  text-transform: uppercase
+  font-weight: bold
+  @media (max-width: 1200px)
+    font-size: 1.25rem
+    letter-spacing: 0.083rem
+    margin-top: 1rem
+
+.playButton
+  margin-top: 1rem
+
+.carouselDots
+  display: flex
+  margin-top: 2rem
+  @media (max-width: 1200px)
+    display: none
+
+.carouselDot
+  width: 0.75rem
+  height: 0.75rem
+  border-radius: 50%
+  background-color: white
+  margin: 0.25rem
+
+.carouselActive
+  opacity: 0.3
+
+.mainBubble
+  display: flex
+  align-items: center
+  flex-direction: column
+
+.centerImage
+  width: 23.5rem
+  height: 23.5rem
+  background-image: url('../../img/magestic-princess.png')
+  background-repeat: no-repeat
+  background-size: 100% auto
+  background-position: center center
+  border-radius: 50%
+  border: 0.75rem solid rgba(255, 255, 255, 0.12)
+  margin-bottom: 1.25rem
+
+.centerTitle, .secondaryTitle
+  font-size: 1.375rem
+  line-height: 1.75rem
+  margin-bottom: 1rem
+  font-weight: 300
+
+.centerMessage, .secondaryMessage
+  font-weight: 300
+  line-height: 1.375rem
+
+.secondaryBubbles
+  display: flex
+  justify-content: space-between
+  width: 64rem
+  margin-top: -2rem
+  margin-bottom: 6.5rem
+
+.secondaryBubble
+  display: flex
+  align-items: center
+  flex-direction: column
+
+.secondaryImage
+  width: 10rem
+  height: 10rem
+  background-image: url('../../img/original-content.png')
+  background-repeat: no-repeat
+  background-size: 100% auto
+  background-position: center center
+  border-radius: 50%
+  border: 0.5rem solid rgba(255, 255, 255, 0.12)
+  margin-bottom: 1.25rem
+
+@mixin homeBodyTitle
+  font-weight: 300
+  font-weight: bold
+  font-size: 1.5rem
+  text-transform: uppercase
+  letter-spacing: -0.02rem
+  @media (max-width: 1200px)
+    font-size: 1.25rem
+    padding: 0 2rem
+
+.bodyTitle2
+  @include homeBodyTitle
+  color: #15879C
+  margin-bottom: 1.5rem
+
+.bodyMessage2
+  font-weight: 300
+  font-weight: bold
+  font-size: 0.875rem
+  line-height: 1.25rem
+  max-width: 21.75rem
+  margin: 0 auto 2.5rem auto
+  padding: 0 2rem
+  @media (max-width: 1200px)
+    margin-bottom: 1.25rem
+
+.pressAndCompass
+  display: flex
+  justify-content: center
+  margin-top: 3rem
+  margin-bottom: 5rem
+  @media (max-width: 1200px)
+    display: block
+    margin-bottom: 3rem
+
+.press, .compass
+  flex: 0 0 21rem
+  margin: 0 1rem
+
+.press
+  @media (max-width: 1200px)
+    margin-bottom: 3rem
+
+.pressIcon, .compassIcon
+  width: 9rem
+  height: 9rem
+  border-radius: 50%
+  background-color: rgba(0, 0, 0, 0.12)
+  margin: auto
+  margin-bottom: 1.5rem
+  background-repeat: no-repeat
+  background-position: center center
+
+.pressIcon
+  background-image: url('../../img/press-icon.svg')
+
+.compassIcon
+  background-image: url('../../img/compass-icon.svg')
+
+.bodyTitle3
+  @include homeBodyTitle
+  color: #1F7F7B
+  margin-bottom: 0.5rem
+  @media (max-width: 1200px)
+    font-size: 1.5rem
+    letter-spacing: -0.03rem
+
+.experienceOcean
+  @include button
+  margin-bottom: 5rem
+  @media (max-width: 1200px)
+    margin-bottom: 2rem
+
+.carouselMessage
+  margin-bottom: 2rem
+
+.homeMessage
+  @include sectionMessage
+  margin-top: 3rem

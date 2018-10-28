@@ -1,0 +1,51 @@
+@import 'common'
+@import 'bubble-carousel-header'
+
+.shows
+  display: flex
+  margin-bottom: 5.5rem
+  flex-wrap: wrap
+  max-width: 76.5rem
+  @media (max-width: 1200px)
+    display: block
+    margin-bottom: 1rem
+
+.show
+  margin: 0 3.75rem 2rem 3.75rem
+  max-width: 20rem
+
+.image
+  width: 15rem
+  height: 15rem
+  background-position: center center
+  background-repeat: no-repeat
+  border-radius: 50%
+  border: 1rem solid rgba(255, 255, 255, 0.25)
+  display: flex
+  justify-content: center
+  align-items: center
+  cursor: pointer
+  margin: 0 auto 0.5rem auto
+  background-clip: content-box
+
+.vacationCreationImage
+  background-image: url('../../img/vacation-creation.png')
+
+.oceanTreksImage
+  background-image: url('../../img/ocean-treks.png')
+
+.showTitle
+  @include textShadow
+  font-weight: 300
+  font-size: 1.25rem
+  line-height: 1.75rem
+  margin-bottom: 0.5rem
+  @media (max-width: 1200px)
+    font-size: 1.125rem
+
+.seeMore
+  margin-bottom: 2.5rem
+
+.showSchedule, .showStarting
+  @media (max-width: 1200px)
+    font-size: 0.875rem

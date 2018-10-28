@@ -1,0 +1,35 @@
+.uibutton2
+  position: relative
+  display: inline-block
+  border: 3px solid rgba(252, 250, 255, 0.77)
+  color: #fff
+  width: 50px
+  height: 50px
+  border-radius: 30px
+  text-decoration: none
+  background: #1e73a0
+  background-repeat: no-repeat
+  background-image: linear-gradient( top left, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.2) 37%, rgba(255, 255, 255, 0.8) 45%, rgba(255, 255, 255, 0.0) 50% ), -webkit-linear-gradient( #3e779d, #65a9d7 )
+  background-position: -100px -100px, 0 0
+  background-size: 300% 300%, 100% 100%
+  transition: background-position 0s ease
+  cursor: pointer
+  flex: 0 0 auto
+  &:hover, &:focus
+    color: #fff
+    background-position: 0 0, 0 0
+    transition-duration: 0.75s
+  &:active
+    top: 1px
+  &:after
+    position: absolute
+    content: " "
+    //background-image: url('../../img/dimeicons.png')
+    background-repeat: no-repeat
+    background-position: center
+    top: 0px
+    left: 0px
+    width: 50px
+    height: 50px
+  &:hover:after
+    //background-image: url('../../img/dimeicons_c.png')

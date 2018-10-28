@@ -1,0 +1,27 @@
+{  
+  "$id": "emergencyContact",
+  "type": "object",
+  "required": ["id", "name", "dayPhone", "email", "relationship"],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 3,
+      "errorMessage": {
+        "minLength": "too sh$rt"
+      }
+    },
+    "dayPhone": {
+      "type": "string",
+      "minLength": 1,
+      "errorMessage": "BOOM"
+    },
+    "email": {
+      "type": "string"
+    },
+    "relationship": { "type": "string" }
+  },
+  "additionalProperties": false
+}

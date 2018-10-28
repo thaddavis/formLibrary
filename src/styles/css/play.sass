@@ -1,0 +1,53 @@
+@import 'mixins'
+@import 'bulma-config'
+
+.container
+  position: relative
+  width: 100%
+  min-height: 100vh
+  height: 100%
+  background-color: $resolution-blue
+  background-image: url('../../img/play/rings.svg'), linear-gradient(-180deg, #1864B8 0%, #093897 37%, #02163E 94%)
+  background-position: left
+  background-repeat: no-repeat
+  color: $white
+  
+.download
+  text-transform: uppercase
+  font-weight: 500
+  
+.centered
+  display: flex
+  align-items: center
+  justify-content: center
+  flex-direction: column
+  margin-bottom: 3rem
+  
+  & img
+    margin-top: 2rem
+    max-width: 23rem
+    @include mobile()
+      max-width: 15rem
+    
+  & h2
+    font-weight: 300
+    font-style: normal
+    max-width: 40%
+    text-align: center
+    margin: 0 0 2rem 0
+    color: $black
+    
+    @include mobile()
+      max-width: 90%
+    
+.columns
+  margin: 0!important
+  padding-left: 2rem
+  padding-right: 2rem
+  margin-bottom: 4rem!important
+  color: $white
+  
+.separator
+  height: 0
+  width: 0
+  margin-bottom: 8rem

@@ -1,0 +1,38 @@
+@import 'styles/css/vars.sass'
+@import 'styles/css/_bulma-config.sass'
+
+.tabs
+  display: flex
+  justify-content: space-around
+  width: 100%
+  max-width: 60rem
+  padding: 0 1rem
+  flex-wrap: wrap
+
+.actionButton
+  color: white
+  text-decoration: none
+  text-align: center
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  position: relative
+  margin: 0 0.75rem
+
+.actionTitle
+  color: $creme-70
+  font-size: 1.625rem
+  font-weight: 300
+  margin-top: 0.75rem
+  text-align: center
+  padding-top: 0.25rem
+  border-top: 0.125rem solid transparent
+  cursor: pointer
+  @include mobile()
+    font-size: 1rem
+
+.active
+  color: white
+  visibility: visible
+  border-bottom: 0.125rem solid white

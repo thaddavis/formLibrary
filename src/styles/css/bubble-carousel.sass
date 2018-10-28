@@ -1,0 +1,138 @@
+@import 'common'
+
+$shrinkRatio: 0.618
+$topOffsetRatio: 0.318
+$sideOffsetRatio: 0.618
+$lgSideBubble: $lgActive * $shrinkRatio
+$mdSideBubble: $mdActive * $shrinkRatio
+$smSideBubble: $smActive * $shrinkRatio
+
+.bubbleCarouselContainer
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  text-align: center
+  z-index: 3
+
+.bubbleCarousel
+  margin: 0.5rem auto
+  perspective: 5rem
+  overflow: visible
+  position: relative
+  width: $lgActive
+  height: $lgActive
+  @media (max-width: $lg)
+    width: $mdActive
+    height: $mdActive
+  @media (max-width: $md)
+    width: $smActive
+    height: $smActive
+
+.carouselItem
+  display: flex
+  justify-content: center
+  align-items: center
+  border-radius: 50%
+  box-shadow: 0 0 0 0rem rgba(255,255,255,0.38)
+  border: 0 solid rgba(255, 255, 255, 0.38)
+  background-size: 105% auto
+  background-repeat: no-repeat
+  background-position: center center
+  box-sizing: border-box
+  opacity: 0.8
+  cursor: pointer
+  transition: all 0.35s
+  position: absolute
+  background-clip: content-box
+  // IE11 needs "vw" otherwise it does some funky animations
+  // and if we put 0vw, then the minifier sets it to 0px
+  top: 0.0001vw
+  left: 0.0001vw
+  width: $lgActive
+  height: $lgActive
+  @media (max-width: $lg)
+    width: $mdActive
+    height: $mdActive
+    top: 0rem
+    left: 0rem
+  @media (max-width: $md)
+    width: $smActive
+    height: $smActive
+    top: 0rem
+    left: 0rem
+  &.isResizing
+    transition-duration: 0s
+
+.centerBubble
+  opacity: 1
+  z-index: 3
+  border: 0.875rem solid rgba(255,255,255,0.38)
+  @media (max-width: $lg)
+    border: 0.5rem solid rgba(255,255,255,0.38)
+  @media (max-width: $md)
+    border: 0.25rem solid rgba(255,255,255,0.38)
+
+@mixin sideBubble
+  z-index: 1
+  width: $lgSideBubble
+  height: $lgSideBubble
+  top: $lgSideBubble * $topOffsetRatio
+  @media (max-width: $lg)
+    width: $mdSideBubble
+    height: $mdSideBubble
+    top: $mdSideBubble * $topOffsetRatio
+  @media (max-width: $md)
+    width: $smSideBubble
+    height: $smSideBubble
+    top: $mdSideBubble * $topOffsetRatio
+
+.leftBubble
+  @include sideBubble
+  left: -$sideOffsetRatio * $lgSideBubble
+  @media (max-width: $lg)
+    left: -$sideOffsetRatio * $mdSideBubble
+  @media (max-width: $md)
+    left: -$sideOffsetRatio * $smSideBubble
+
+$rightOffsetRatio: 1 - $sideOffsetRatio
+
+.rightBubble
+  @include sideBubble
+  left: $lgActive - ($rightOffsetRatio * $lgSideBubble)
+  @media (max-width: $lg)
+    left: $mdActive - ($rightOffsetRatio * $mdSideBubble)
+  @media (max-width: $md)
+    left: $smActive - ($rightOffsetRatio * $smSideBubble)
+
+
+.backBubble
+  z-index: 1
+  @include sideBubble
+  left: ($lgActive / 2) - ($lgSideBubble / 2)
+  @media (max-width: $lg)
+    left: ($mdActive / 2) - ($mdSideBubble / 2)
+  @media (max-width: $md)
+    left: ($smActive / 2) - ($smSideBubble / 2)
+
+.goingRight
+  .rightBubble
+    z-index: 2
+  .centerBubble
+    z-index: 4
+  .leftBubble
+    z-index: 3
+
+.goingLeft
+  .rightBubble
+    z-index: 3
+  .centerBubble
+    z-index: 4
+  .leftBubble
+    z-index: 2
+
+.playButton
+  opacity: 0
+  transition: opacity 0.35s ease-in-out
+  &.activePlayButton
+    opacity: 1

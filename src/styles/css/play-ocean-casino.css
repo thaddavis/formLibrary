@@ -1,0 +1,31 @@
+
+.app-instructions {margin-bottom: 80px; width: 100%}
+.app-instructions .app-icon img {max-width: 150px; margin: 30px 0}
+.app-instructions h3 {font-size: 24px}
+.app-instructions ul {text-align: left; margin: 0 0 60px 0}
+.app-instructions ul li {margin: 10px 0}
+.app-instructions a {color: #fcef0a; text-decoration: none; font-weight: 600}
+.app-instructions .app-requirements {font-size: 14px; line-height: 1.5em; opacity: .5}
+.app-instructions .sm-hidden {display: block}
+.app-instructions .home__hr___2p7Yf {display: none}
+
+.app-instructions ol {text-align: left; font-size: 18px; font-weight: bold}
+.screen-steps {font-size: 0; display: flex; flex-wrap: wrap; width: 100%;}
+.screen-step {flex: 1 0 50%; font-size: 18px; font-weight: bold; position: relative; vertical-align: top; box-sizing: border-box; margin-bottom: 40px; /*padding: 20px;*/ }
+/*.screen-step:nth-child(odd) {margin-right: 20px}*/
+.screen-step--number {display: inline; font-weight: bold; margin-right: 15px;}
+.screen-step--img {max-width: 100%}
+.screen-step--img img {max-width: 100%;}
+.screen-step--text {display: block; padding: 0 1rem}
+.sideload-title img {width: 320px; max-width: 100%}
+
+@media (max-width: 767px){
+.app-instructions {margin: 0 20px 80px 20px}
+.app-instructions ul {padding: 0; margin-left: 20px}
+.app-instructions a {display: block; color: #00561a; width: 200px; margin: 30px auto; text-align: center;}
+.app-instructions .sm-hidden {display: none}
+.app-instructions .home__hr___2p7Yf {display: block; margin-top: 0}
+
+.app-instructions a.inline {display: inline; background: none; color: #fcef0a; width: auto; margin: 0; transform: none; padding: 0; text-align: left; border-radius: 0}
+.screen-step { flex: 1 0 100%; }
+}

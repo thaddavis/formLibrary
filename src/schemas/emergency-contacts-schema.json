@@ -1,0 +1,7 @@
+{
+  "$id": "emergencyContacts",
+  "type": "array",
+  "items": {
+    "$ref": "emergencyContact"
+  }
+}

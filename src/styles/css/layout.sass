@@ -1,0 +1,68 @@
+@import 'fonts'
+@import 'styles/css/_bulma-config.sass'
+
+:global
+  html
+    @media (min-width: 2500px)
+      font-size: 1.25em
+  html, body
+    &.no-scroll
+      position: fixed
+      overflow: hidden
+    @media (max-width: 1200px)
+      overflow-x: hidden
+      width: 100vw
+  body
+    position: relative
+  button
+    background: none
+  body, html, #main, #layout
+    padding: 0
+    margin: 0
+    font-family: 'Gotham SSm', 'Open Sans', Arial, Helvetica, sans-serif
+    min-height: 100vh
+    background-color: white
+    -webkit-font-smoothing: antialiased
+    -moz-osx-font-smoothing: grayscale
+    // image preloader, make sure this doesn't happen on mobile
+    @media only screen and (min-width: 1200px)
+      &::after
+        content: ' '
+        position: absolute
+        overflow: hidden
+        width: 0
+        height: 0
+        background-image: url('../../img/bg-jewelblue.jpg'), url('../../img/home-header-1.png'), url('../../img/home-header-3.png'), url('../../img/find-a-cruise-header-1.png'), url('../../img/find-a-cruise-header-1.png'), url('../../img/find-a-cruise-header-3.png'), url('../../img/medallion-class-header-1.png'), url('../../img/medallion-class-header-2.png'), url('../../img/medallion-class-header-3.png'), url('../../img/ships-header-3.png'), url('../../img/destinations-header-1.png'), url('../../img/destinations-header-2.png'), url('../../img/press-header-1.png'), url('../../img/full-detail-header-1.png'), url('../../img/full-detail-header-6.png')
+
+  #main, #layout
+    display: flex
+    flex-direction: column
+    z-index: 0
+
+  .page-enter
+    opacity: 0.01
+    transition: opacity 0.5s ease-out
+    z-index: 4
+    margin-right: -100vw
+  .page-enter.page-enter-active
+    opacity: 1
+  .page-leave
+    opacity: 1
+    transition: opacity 0.5s ease-out
+    z-index: 5
+  .page-leave.page-leave-active
+    opacity: 0
+  .page-appear
+    opacity: 0.01
+  .page-appear.page-appear-active
+    opacity: 1
+    transition: opacity 0.5s ease-out
+
+  .error
+    color: red
+
+  a
+    outline: none
+
+  #pages
+    z-index: 0

@@ -133,9 +133,8 @@ export default function formViewHOC({
             id="form_view_back_button"
           >
             {
-                hasBackButton && 
+                hasBackButton && 'Back'
                 // <img className={CSS.backIcon} src={BackIcon} alt="go back" />
-                "Back"
             }
             <span className={`${CSS.headerTitle} ${CSS.isHiddenTablet}`} >
               {backText}
@@ -239,14 +238,14 @@ export default function formViewHOC({
 
   function mapStateToProps(state) {
     return {
-    //   titleOverride: state.header.titleOverride,
-    //   backPathOverride: state.header.backPathOverride,
-    //   backTextOverride: state.header.backTextOverride,
-    //   shouldUseGoBack: state.header.shouldUseGoBack,
-        titleOverride: true,
-        backPathOverride: true,
-        backTextOverride: true,
-        shouldUseGoBack: true
+      // titleOverride: state.header.titleOverride,
+      // backPathOverride: state.header.backPathOverride,
+      // backTextOverride: state.header.backTextOverride,
+      // shouldUseGoBack: state.header.shouldUseGoBack,
+      titleOverride: '',
+      backPathOverride: '',
+      backTextOverride: '',
+      shouldUseGoBack: true
     };
   }
 

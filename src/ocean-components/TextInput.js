@@ -27,6 +27,8 @@ import classnames from 'classnames';
 import CSS from './TextInput.sass';
 
 const p = console.log;
+p('!!!')
+p(CSS)
 
 class TextInput extends React.Component {
   constructor(props) {
@@ -95,7 +97,7 @@ class TextInput extends React.Component {
     );
     const classname = classnames(
       CSS.textInput,
-      { [CSS.error]: this.props.error },
+      { [CSS.error]: this.props.errors },
       { [CSS.warning]: this.props.showWarning },
     );
 
@@ -153,13 +155,17 @@ class TextInput extends React.Component {
   }
 
   error() {
-    const className = classnames({ [CSS.errorMessage]: this.props.error }, { [CSS.warnMessage]: this.props.showWarning });
+    // p('error()')
+    // p(this.props);
 
-    if (this.props.error) {
-      return (
-        <div className={className}>
-          { this.props.error }
-        </div>
+    if (this.props.errors) {
+      return ( 
+        this.props.errors.map((e, index) => (
+          <div key={index} className={classnames(CSS.errorMessage)}>
+            { e.code }
+            <br/>
+          </div>  
+        ))
       );
     }
 
@@ -188,7 +194,7 @@ class TextInput extends React.Component {
 }
 
 TextInput.defaultProps = {
-  error: false,
+  errors: false,
   id: '',
   label: '',
   className: '',
@@ -211,7 +217,7 @@ TextInput.propTypes = {
   onBlur: PropTypes.func,
   onKeyDown: PropTypes.func,
   inputName: PropTypes.string,
-  error: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  errors: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
   type: PropTypes.string,
   label: PropTypes.string,
   className: PropTypes.string,

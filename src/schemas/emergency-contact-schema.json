@@ -9,14 +9,12 @@
     "name": {
       "type": "string",
       "minLength": 3,
-      "errorMessage": {
-        "minLength": "too sh$rt"
-      }
+      "isNotEmpty": true
     },
     "dayPhone": {
       "type": "string",
       "minLength": 1,
-      "errorMessage": "BOOM"
+      "isNotEmpty": true
     },
     "email": {
       "type": "string"

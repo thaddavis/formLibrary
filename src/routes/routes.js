@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
 import ShowPersonalInformation from '../components/show-personal-info';
-import EditEmergencyContactsInformation from '../components/edit-emergency-contact';
+import EditEmergencyContactsInformation from '../components/edit-emergency-contacts';
 
 export default class MainRoutes extends Component {
     constructor(props) {

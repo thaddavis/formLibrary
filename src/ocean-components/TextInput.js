@@ -46,7 +46,9 @@ class TextInput extends React.Component {
 
   componentDidUpdate() {}
 
-  componentWillReceiveProps(nextProps) {}
+  componentWillReceiveProps(nextProps) {
+    p('componentWillReceiveProps')
+  }
 
   focusField() {
     this.inputRef.focus();
@@ -75,7 +77,7 @@ class TextInput extends React.Component {
   onBlur(e, value = '') {
     const inputValue = value || e.currentTarget.value;
     if (this.props.onBlur) {
-      this.props.onBlur(e, this.props.inputName, inputValue);
+      this.props.onBlur(e, this.props.path, inputValue);
     }
   }
 
@@ -147,11 +149,14 @@ class TextInput extends React.Component {
 
   error() {
     // p('error()')
-    // p(this.props);
+    // p(this.props)
 
-    if (this.props.errors) {
+    let errors = get(this.props.errors, this.props.path);
+    let touched = get(this.props.touched, this.props.path);
+
+    if (touched && errors) {
       return (
-        this.props.errors.map((e, index) => (
+        errors.map((e, index) => (
           <div key={index} className={classnames(CSS.errorMessage)}>
             { e.code }
             <br />

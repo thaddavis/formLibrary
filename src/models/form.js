@@ -8,6 +8,8 @@ import {
   prepareValues,
 } from '../helpers/helpersForAjv';
 
+import merge from 'deepmerge'
+
 const _ = require('lodash');
 
 const p = console.log;
@@ -60,7 +62,7 @@ export default {
             ...state,
             [payload.formId]: {
               ...state[payload.formId],
-              touched: payload.touched
+              touched: merge(state[payload.formId].touched || {}, payload.touched)
             }
           }
         },
@@ -101,8 +103,7 @@ export default {
           let preparedObject = prepareValues(payload.values, payload.field);
           payload.values = preparedObject;
           p(payload.values);
-          debugger;
-
+          
           let ajv = instanceOfAjv();
           const validate = ajv.compile(payload.schema);
           let valid = validate(preparedObject);
@@ -121,6 +122,10 @@ export default {
 
         },
         async blurField(payload, rootState) {
+          p('blurField')
+          p(JSON.stringify(payload));
+          // p(payload)
+
           payload.touched = payload.touched || {};
           assign(payload.touched, payload.field, true);
 

@@ -103,6 +103,8 @@ class EditEmergencyContactsInfo extends XevoForm {
   }
 
   async handleOnBlur(e, inputName, value) {
+    p('handleOnBlur');
+
     await this.props.formActions.blurField({
       formId: this.props.formId,
       field: inputName,
@@ -115,6 +117,9 @@ class EditEmergencyContactsInfo extends XevoForm {
   }
 
   async handleOnChange(e, inputName, value) {
+    p('handleOnChange --- ***')
+    // p(JSON.stringify(e))
+
     await this.props.formActions.changeField({
       formId: this.props.formId,
       field: inputName,
@@ -169,6 +174,8 @@ class EditEmergencyContactsInfo extends XevoForm {
             onChange: this.handleOnChange,
             path: '',
             data: prepareValues(this.props.form.values, uiSchema.type === 'array' ? '0' : ''),
+            errors: this.props.form.errors,
+            touched: this.props.form.touched,
           })
         }
 

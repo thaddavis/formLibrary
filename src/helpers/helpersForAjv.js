@@ -17,10 +17,7 @@ export function isNormalInteger(str) {
 export function prepareValues(values, field) {
   
   var finalVar = isNormalInteger(field.split(".")[0]) ? [] : {};
-  // var finalVar = isRootArrayOrObject === 'array' ? [] : {};
-  p(finalVar)
-  debugger;
-
+  
   function recurse(val, path = '') {
     // console.log('prepareValuesObjectForValidation');
     

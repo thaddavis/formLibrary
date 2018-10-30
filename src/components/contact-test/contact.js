@@ -16,25 +16,34 @@ const p = console.log;
 const uiSchema = {
   type: 'object',
   items: {
-    name: {
-      type: 'field',
-      component: TextInput,
+    row1: {
+      type: 'array',
+      ordered: true,
+      items: {
+        firstName: {
+          type: 'field',
+          component: TextInput,
+        },
+        middle: {
+          type: 'field',
+          component: TextInput,
+        },
+      },
     },
-    dayPhone: {
-      type: 'field',
-      component: TextInput,
-    },
-    email: {
-      type: 'field',
-      component: TextInput,
-    },
-    relationship: {
-      type: 'field',
-      component: TextInput,
+    row2: {
+      type: 'array',
+      ordered: true,
+      items: {
+        lastName: {
+          type: 'field',
+          component: TextInput,
+        },
+      },
     },
   },
 };
-class EditEmergencyContactInfo extends XevoForm {
+
+class ContactForm extends XevoForm {
   constructor(props) {
     super(props);
   }
@@ -44,7 +53,7 @@ class EditEmergencyContactInfo extends XevoForm {
       <div>
         <br />
 
-        Emergency Contact
+        Contact Form
 
         {
           this.renderUiSchema(uiSchema, {
@@ -62,7 +71,7 @@ class EditEmergencyContactInfo extends XevoForm {
   }
 }
 
-EditEmergencyContactInfo.defaultProps = {
+ContactForm.defaultProps = {
   history: {
     push: Function.prototype,
   },
@@ -79,7 +88,7 @@ EditEmergencyContactInfo.defaultProps = {
   userId: '',
 };
 
-EditEmergencyContactInfo.propTypes = {
+ContactForm.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }),
@@ -121,4 +130,4 @@ function mapStateToProps(state) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(EditEmergencyContactInfo);
+)(ContactForm);

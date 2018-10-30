@@ -14,10 +14,13 @@ export function isNormalInteger(str) {
   return /^\+?(0|[1-9]\d*)$/.test(str);
 }
 
-export function prepareValuesObjectForValidation(values, field) {
-
-  var finalVar = isNormalInteger(field.split(".")[0]) ? [] : {};
+export function prepareValues(values, field) {
   
+  var finalVar = isNormalInteger(field.split(".")[0]) ? [] : {};
+  // var finalVar = isRootArrayOrObject === 'array' ? [] : {};
+  p(finalVar)
+  debugger;
+
   function recurse(val, path = '') {
     // console.log('prepareValuesObjectForValidation');
     
@@ -84,6 +87,8 @@ export function buildTouchedObjectWithEveryValueSetToTrue(values) {
 }
 
 export function groupErrors(errors) {
+  p('groupErrors');
+  p(errors);
   
   var errorsObject = {};
   for (let e of Object.keys(errors)) {

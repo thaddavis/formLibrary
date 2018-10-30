@@ -5,7 +5,7 @@ import {
   isNormalInteger, 
   buildTouchedObjectWithEveryValueSetToTrue,
   groupErrors,
-  prepareValuesObjectForValidation,
+  prepareValues,
 } from '../helpers/helpersForAjv';
 
 const _ = require('lodash');
@@ -17,10 +17,9 @@ export default {
       editEmergencyContacts: {}
     },
     reducers: {
-        setResetForm: (state, payload) => {
+        resetForm: (state, payload) => {
           return {
             ...state,
-            form: payload
           }
         },
         setFields: (state, payload) => {
@@ -44,6 +43,8 @@ export default {
           };
         },
         setStateAfterChangeField: (state , payload) => {
+          p('setStateAfterChangeField')
+          p(payload);
           return {
             ...state,
             [payload.formId]: {
@@ -67,7 +68,7 @@ export default {
     effects: (dispatch) => ({
         async reset(payload, rootState) {
 
-          dispatch.form.setResetForm();
+          dispatch.form.resetForm();
           return Promise.resolve();
 
         },
@@ -91,22 +92,28 @@ export default {
 
         },
         async changeField(payload, rootState) {
+          p('changeField --- ');
+          p(JSON.stringify(payload));
           
-          payload.values = payload.values || {}; 
+          payload.values = payload.values || {};
           payload.touched = payload.touched || {};
           assign(payload.values, payload.field, payload.value);
-          let preparedObject = prepareValuesObjectForValidation(payload.values, payload.field);
-          
+          let preparedObject = prepareValues(payload.values, payload.field);
+          payload.values = preparedObject;
+          p(payload.values);
+          debugger;
+
           let ajv = instanceOfAjv();
           const validate = ajv.compile(payload.schema);
           let valid = validate(preparedObject);
           if (!valid) {
             // console.log(validate.errors);
           }
-
+          
           payload.valid = !validate.errors;
           payload.errors = groupErrors(Object.assign({}, validate.errors));
 
+          p(payload);
           dispatch.form.setStateAfterChangeField(
             payload
           )

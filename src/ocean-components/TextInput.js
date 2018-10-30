@@ -27,19 +27,10 @@ import classnames from 'classnames';
 import CSS from './TextInput.sass';
 
 const p = console.log;
-p('!!!')
-p(CSS)
 
 class TextInput extends React.Component {
   constructor(props) {
-    p('constructor --- TextInput');
-
     super(props);
-
-    // this.state = {
-    //   value: '',
-    //   error: '',
-    // };
 
     this.inputRef = {};
     this.focusField = this.focusField.bind(this);
@@ -50,26 +41,12 @@ class TextInput extends React.Component {
   }
 
   componentDidMount() {
-    // if (this.props.error) {
-    //   this.setState({ error: this.props.error });
-    // }
-    // if (this.props.value && this.props.value !== this.state.value) {
-    //   this.setState({ value: this.props.value });
-    // }
+
   }
 
-  componentWillReceiveProps(nextProps) {
-    // if (nextProps.error !== this.props.error) {
-    //   this.setState({ error: nextProps.error });
-    // }
+  componentDidUpdate() {}
 
-    // if (
-    //   nextProps.value &&
-    //     nextProps.value !== this.state.value
-    // ) {
-    //   this.setState({ value: nextProps.value });
-    // }
-  }
+  componentWillReceiveProps(nextProps) {}
 
   focusField() {
     this.inputRef.focus();
@@ -84,8 +61,21 @@ class TextInput extends React.Component {
   onChange(e, value = '') {
     const inputValue = value || e.currentTarget.value;
     if (this.props.onChange) {
-      // this.setState({ value: inputValue });
-      this.props.onChange(e, this.props.inputName, inputValue);
+      this.props.onChange(e, this.props.path, inputValue);
+    }
+  }
+
+  onFocus(e) {
+    if (this.props.onFocus) {
+      this.props.onFocus(e);
+    }
+    this.inputRef.focus();
+  }
+
+  onBlur(e, value = '') {
+    const inputValue = value || e.currentTarget.value;
+    if (this.props.onBlur) {
+      this.props.onBlur(e, this.props.inputName, inputValue);
     }
   }
 
@@ -116,6 +106,7 @@ class TextInput extends React.Component {
           onFocus={this.onFocus}
           onKeyDown={this.onKeyDown}
           onClick={this.onFocus}
+          // value={get(this.props.data, this.props.path)}
           value={this.props.value}
           aria-label={this.props.label}
           type={(this.props.type === 'email' || this.props.type === 'tel') ? 'text' : this.props.type}
@@ -132,7 +123,7 @@ class TextInput extends React.Component {
           onClick={this.focusField}
           id={`text_input_label_${this.props.id}`}
         >
-          V2 - {this.props.label}
+          {this.props.label}
         </label>
         {this.error()}
       </div>
@@ -149,7 +140,7 @@ class TextInput extends React.Component {
         aria-label={this.props.label + (this.props.subText ? ` ${this.props.subText}` : '')}
         role="textbox"
       >
-        {this.props.label}
+        Label{this.props.label}
       </label>
     );
   }
@@ -159,12 +150,12 @@ class TextInput extends React.Component {
     // p(this.props);
 
     if (this.props.errors) {
-      return ( 
+      return (
         this.props.errors.map((e, index) => (
           <div key={index} className={classnames(CSS.errorMessage)}>
             { e.code }
-            <br/>
-          </div>  
+            <br />
+          </div>
         ))
       );
     }
@@ -173,24 +164,6 @@ class TextInput extends React.Component {
       <div />
     );
   }
-
-  onFocus(e) {
-    if (this.props.onFocus) {
-      this.props.onFocus(e);
-    }
-    this.inputRef.focus();
-    // this.setState({ focused: true });
-  }
-
-  onBlur(e, value = '') {
-    // this.setState({ focused: false });
-
-    const inputValue = value || e.currentTarget.value;
-    if (this.props.onBlur) {
-      // this.setState({ value: inputValue });
-      this.props.onBlur(e, this.props.inputName, inputValue);
-    }
-  }
 }
 
 TextInput.defaultProps = {
@@ -198,10 +171,14 @@ TextInput.defaultProps = {
   id: '',
   label: '',
   className: '',
+  onChange: Function.prototype,
+  onBlur: Function.prototype,
   type: 'text',
   isValid: false,
   inputName: '',
   value: '',
+  data: {},
+  path: '',
   containerClassName: '',
   showWarning: '',
   disabled: false,
@@ -213,6 +190,8 @@ TextInput.propTypes = {
   containerClassName: PropTypes.string,
   id: PropTypes.string,
   value: PropTypes.string,
+  data: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  path: PropTypes.string,
   onChange: PropTypes.func,
   onBlur: PropTypes.func,
   onKeyDown: PropTypes.func,

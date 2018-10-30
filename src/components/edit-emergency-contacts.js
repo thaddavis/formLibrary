@@ -9,58 +9,51 @@ import get from 'lodash/get';
 // import { SelectOption, TextInput } from 'ocean-components';
 import { SelectOption, TextInput } from '../ocean-components';
 
+import XevoForm from './xevo-form';
+
 import formView from './form-view/form-view';
 import emergencyContactsSchema from '../schemas/emergency-contacts-schema.json';
 import EditEmergencyContactInfo from './edit-emergency-contact';
 import CSS from './edit-emergency-contacts.sass';
+import { prepareValues } from '../helpers/helpersForAjv';
 
-let p = console.log
+const p = console.log;
 
-var uiSchema = {
+const uiSchema = {
   type: 'array',
   items: {
-    type: EditEmergencyContactInfo
-  }
-}
+    type: EditEmergencyContactInfo,
+  },
+};
 
-class EditEmergencyContactsInfo extends React.Component {
+class EditEmergencyContactsInfo extends XevoForm {
   constructor(props) {
     p('EditEmergencyContactsInfo --- constructor');
 
     super(props);
 
-    p(props)
+    p(this.props);
 
-    this.handleOnBlur = this.handleOnBlur.bind(this);
-    this.handleOnChange = this.handleOnChange.bind(this);
+    // this.handleOnBlur = this.handleOnBlur.bind(this);
+    // this.handleOnChange = this.handleOnChange.bind(this);
+    this.renderUiSchema = this.renderUiSchema.bind(this);
     this.saveButtonClicked = this.saveButtonClicked.bind(this);
     this.cancelButtonClicked = this.cancelButtonClicked.bind(this);
     this.enableSaveButton = this.enableSaveButton.bind(this);
     this.displayedErrors = this.displayedErrors.bind(this);
-    this.renderUiSchema = this.renderUiSchema.bind(this);
   }
 
-  // custom data initialization code may be specified here
   async componentDidMount() {
+    p('componentDidMount');
     const { data } = this.props;
     if (data) {
       p('THERE');
-      
-      await this.props.setFields({ formId: this.props.formId, values: data });
-      await this.props.validateForm({ formId: this.props.formId, schema: this.props.schema, values: this.props.form.values });
-      this.props.disableSave(!this.props.form.valid);
+      this.setFormFields(data);
     } else if (this.props.appIsReady) {
+      p('HERE');
       try {
         const res = await this.props.userActions.fetchUserEmergencyContact(this.props.userId);
-        this.props.setFields({
-          formId: this.props.formId,
-          values: res,
-        });
-        this.props.validateForm({
-         schema: this.props.schema,
-         values: this.props.values
-        })
-        this.props.disableSave(!this.props.form.valid);
+        this.setFormFields(res);
       } catch (error) {
         // logger.error('Something went wrong in edit-emergency-contact');
         // logger.error(error);
@@ -69,8 +62,11 @@ class EditEmergencyContactsInfo extends React.Component {
   }
 
   async componentDidUpdate(prevProps) {
+    p('componentDidUpdate');
+
     if (this.props.appIsReady && prevProps.appIsReady !== this.props.appIsReady) {
       const res = await this.props.userActions.fetchUserEmergencyContact(this.props.userId);
+      this.setEmergencyContacts(res);
     }
     if (this.props.saveClickEvent && this.props.saveClickEvent !== prevProps.saveClickEvent) {
       return this.props.save(this.saveButtonClicked);
@@ -79,6 +75,15 @@ class EditEmergencyContactsInfo extends React.Component {
       return this.props.cancel(this.cancelButtonClicked);
     }
     return null;
+  }
+
+  async setFormFields(data) {
+    await this.props.formActions.setFields({
+      formId: this.props.formId,
+      values: data
+    });
+
+    this.props.disableSave((this.props.form && !this.props.form.valid) || true);
   }
 
   async saveButtonClicked() {
@@ -98,105 +103,113 @@ class EditEmergencyContactsInfo extends React.Component {
   }
 
   async handleOnBlur(e, inputName, value) {
-    await this.props.blurField({
+    await this.props.formActions.blurField({
       formId: this.props.formId,
       field: inputName,
       value,
       schema: this.props.schema,
-      values: this.props.form.values,
-      touched: this.props.form.touched,
+      values: this.props.form && this.props.form.values,
     });
+
     this.enableSaveButton();
   }
 
   async handleOnChange(e, inputName, value) {
-    await this.props.changeField({
+    await this.props.formActions.changeField({
       formId: this.props.formId,
       field: inputName,
       value,
       schema: this.props.schema,
-      values: this.props.form.values,
+      values: Object.assign({}, this.props.form && this.props.form.values),
     });
+
     this.enableSaveButton();
   }
 
   enableSaveButton() {
-    this.props.disableSave(!this.props.form.valid);
+    this.props.disableSave((this.props.form && !this.props.form.valid) || true);
   }
 
   displayedErrors(key) {
-    if (get(this.props.form.touched, key)) {
-      return get(this.props.form.errors, key);
+    if (this.props.form.touched && this.props.form.touched[key]) {
+      return this.props.form.errors && this.props.form.errors[key];
     }
-    return false;
+    return null;
   }
 
   renderFormTitle(title, required = true) {
     return (
       <div className={CSS.formTitle}>
         <h1 className={CSS.title}>{title}</h1>
-        {required ? <span className={CSS.required}>required</span> : null}
+        {/* {required ? <span className={CSS.required}>*</span> : null} */}
       </div>
     );
   }
-  
-  renderUiSchema(uiSchema) {
-    p('renderUiSchema');
-    p(uiSchema);
 
-    return <uiSchema.items.type />
-  }
+  // renderUiSchema(uiSchema) {
+  //   // p('renderUiSchema');
+  //   // p(uiSchema);
+
+  //   return <uiSchema.items.type />;
+  // }
 
   render() {
-    
+    // const { name, dayPhone } = this.state;
+
+    p('render Baby!');
+    // p(this.props.form);
+
     return (
       <div className={CSS.container}>
-        { this.renderFormTitle('emergency_contact', false) }
+        {this.renderFormTitle('Emergency Contacts')}
 
         {
-          this.renderUiSchema(uiSchema)
+          this.renderUiSchema(uiSchema, {
+            onBlur: this.handleOnBlur,
+            onChange: this.handleOnChange,
+            path: '',
+            data: prepareValues(this.props.form.values, uiSchema.type === 'array' ? '0' : ''),
+          })
         }
-        
+
         {/* <TextInput
-          value={get(this.props.form.values, '0.name')}
+          value={this.props.form.values && this.props.form.values.name}
           onChange={this.handleOnChange}
           onBlur={this.handleOnBlur}
           inputName="0.name"
           id="emergency_contact_name_input"
-          label='name'
-          errors={this.displayedErrors('0.name')}
+          label={i18n.t('name')}
+          error={this.displayedErrors('name')}
+          showError={this.props.form.touched && this.props.form.touched.name}
         />
         <TextInput
-          value={get(this.props.form.values, '0.dayPhone')}
-          onChange={this.handleOnChange}
+          value={this.props.form.values && this.props.form.values.phone}
           onBlur={this.handleOnBlur}
-          inputName="0.dayPhone"
-          id="emergency_contact_name_input"
-          label='phone'
-          errors={this.displayedErrors('0.dayPhone')}
-        />
-        <TextInput
-          value={get(this.props.form.values, '0.email')}
           onChange={this.handleOnChange}
-          onBlur={this.handleOnBlur}
-          inputName="0.email"
-          id="emergency_contact_name_input"
-          label='email'
-          errors={this.displayedErrors('0.email')}
-        />
-        <TextInput
-          value={get(this.props.form.values, '0.relationship')}
-          onChange={this.handleOnChange}
-          onBlur={this.handleOnBlur}
-          inputName="0.relationship"
-          id="emergency_contact_name_input"
-          label='relationship'
-          errors={this.displayedErrors('0.relationship')}
+          inputName="0.phone"
+          id="emergency_contact_phone_input"
+          label={i18n.t('phone_number')}
+          error={this.displayedErrors('phone') || false}
+          showError={this.props.form.touched && this.props.form.touched.phone}
         /> */}
-
+        {/* <TextInput
+          value={this.state.address.email}
+          onInputChange={this.handleInput}
+          inputName="email"
+          type="email"
+          id="emergency_contact_email_input"
+          label={i18n.t('email')}
+        />
+        <SelectOption
+          inputName="relationship"
+          id="emergency_contact_relationship_input"
+          label={i18n.t('relationship')}
+          value={this.state.relationship.display}
+          onClick={this.setRelationship}
+          options={relationshipOptions()}
+        /> */}
       </div>
     );
-
   }
 }
 
@@ -237,10 +250,12 @@ EditEmergencyContactsInfo.propTypes = {
 function mapDispatchToProps(dispatch) {
   return {
     //userActions: bindActionCreators(userActions, dispatch),
-    blurField: dispatch.form.blurField,
-    changeField: dispatch.form.changeField,
-    setFields: dispatch.form.setFields,
-    validateForm: dispatch.form.validateForm,
+    formActions: {
+      blurField: dispatch.form.blurField,
+      changeField: dispatch.form.changeField,
+      setFields: dispatch.form.setFields,
+      validateForm: dispatch.form.validateForm,
+    }
   };
 }
 
@@ -255,11 +270,12 @@ function mapStateToProps(state) {
     userId: '123',
     data: [
       {
-        id: 'id1',
-        name: 'TA',
-        dayPhone: 's',
-        email: 'a',
-        // relationship: 'd',
+        id: '1',
+        name: 'one'
+      },
+      {
+        id: '2',
+        name: 'two'
       }
     ],
     form: state.form.editEmergencyContacts,

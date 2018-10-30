@@ -1,15 +1,14 @@
-import React from 'react'
+import React from 'react';
 import get from 'lodash/get';
 
-const p = console.log
+const p = console.log;
 
 class XevoForm extends React.Component {
-
   constructor(props) {
     super(props);
 
-    this.handleOnBlur = this.handleOnBlur.bind(this);
-    this.handleOnChange = this.handleOnChange.bind(this);
+    this.handleOnBlur = props.onBlur ? props.onBlur : this.handleOnBlur.bind(this);
+    this.handleOnChange = props.onChange ? props.onChange : this.handleOnChange.bind(this);
     this.displayedErrors = this.displayedErrors.bind(this);
     this.renderUiSchema = this.renderUiSchema.bind(this);
   }
@@ -42,21 +41,53 @@ class XevoForm extends React.Component {
     return false;
   }
 
-  renderUiSchema(uiSchema) {
-    
+  renderUiSchema(uiSchema, props) {
+
     if (
-      uiSchema.type === 'array' || uiSchema.type === 'object'
+      uiSchema.type === 'array'
     ) {
-      return 'renderUiSchema --- array or object'
+      const content = [];
+      if (props.data) {
+        for (let i = 0; i < props.data.length; i += 1) {
+          const Tmp = uiSchema.items.type;
+          const newPath = props.path === '' ? i.toString() : `${props.path}.${i}`;
+          // p(get(props && props.data, newPath));
+          content.push(<Tmp key={i} onBlur={props && props.onBlur} onChange={props && props.onChange} data={props && props.data} path={newPath} value={get(props && props.data, newPath)} />);
+        }
+        return <div>{ content }</div>;
+      }
+
+      const Tmp = uiSchema.items.type;
+      const newPath = props.path === '' ? '0' : `${props.path}.${'0'}`;
+      // p(get(props && props.data, newPath));
+      content.push(<Tmp key="0" onBlur={props && props.onBlur} onChange={props && props.onChange} data={props && props.data} path={newPath} value={get(props && props.data, newPath)} />);
+      return <div>{ content }</div>;
+    } else if (uiSchema.type === 'object') {
+      const content = Object.keys(uiSchema.items).map((objKey, i) => {
+        const Tmp = uiSchema.items[objKey].component;
+        const newPath = props.path === '' ? objKey : `${props.path}.${objKey}`;
+        // p(get(props && props.data, newPath));
+        return <Tmp key={newPath} onBlur={props && props.onBlur} onChange={props && props.onChange} data={props && props.data} path={newPath} value={get(props && props.data, newPath)} />;
+      });
+
+      return <div>{ content }</div>;
+    } else if (uiSchema.type === 'field') {
+      return 'field';
     }
 
-    return 'renderUiSchema';
+    throw new Error('unsupported uiSchema type');
+
   }
 
   render() {
-    return 'EditEmergencyContactsInfo'
-  }
 
+    return (
+      <div>
+        { this.renderUiSchema() }
+      </div>
+    );
+
+  }
 }
 
-export default XevoForm
+export default XevoForm;

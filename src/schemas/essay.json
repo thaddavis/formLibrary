@@ -1,0 +1,18 @@
+{  
+  "$id": "essay",
+  "type": "object",
+  "required": ["content"],
+  "properties": {
+    "author": {
+      "type": "string",
+      "minLength": 3,
+      "isNotEmpty": true
+    },
+    "content": {
+      "type": "string",
+      "minLength": 3,
+      "isNotEmpty": true
+    }
+  },
+  "additionalProperties": false
+}

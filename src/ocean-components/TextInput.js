@@ -16,6 +16,7 @@ import moment from 'moment';
 // import InputMask from 'react-input-mask';
 import get from 'lodash/get';
 import classnames from 'classnames';
+import set from 'lodash/set';
 
 // Helpers
 // import { isEmailValid } from 'helpers/signup-helper';
@@ -47,7 +48,26 @@ class TextInput extends React.Component {
   componentDidUpdate() {}
 
   componentWillReceiveProps(nextProps) {
-    p('componentWillReceiveProps')
+    p('componentWillReceiveProps');
+    p(nextProps);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    p('shouldComponentUpdate');
+    // debugger;
+    p(this.inputRef)
+
+    this.inputRef.selectionStart = 1;
+    this.inputRef.selectionEnd = 1;
+    // for (let k of Object.keys(nextProps)) {
+    //   p(k);
+    //   // debugger;
+    //   if (nextProps[k] !== this.props[k]) {
+    //     return true;
+    //   }
+    // }
+
+    return true;
   }
 
   focusField() {
@@ -62,6 +82,11 @@ class TextInput extends React.Component {
 
   onChange(e, value = '') {
     const inputValue = value || e.currentTarget.value;
+
+    // debugger;
+
+    // this.props.model.name = evt.target.value;
+    // this.props.value = inputValue;
     if (this.props.onChange) {
       this.props.onChange(e, this.props.path, inputValue);
     }
@@ -201,7 +226,7 @@ TextInput.propTypes = {
   onBlur: PropTypes.func,
   onKeyDown: PropTypes.func,
   inputName: PropTypes.string,
-  errors: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
+  errors: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   type: PropTypes.string,
   label: PropTypes.string,
   className: PropTypes.string,

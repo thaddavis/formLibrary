@@ -19,7 +19,6 @@ export function prepareValues(values, field) {
   var finalVar = isNormalInteger(field.split(".")[0]) ? [] : {};
   
   function recurse(val, path = '') {
-    // console.log('prepareValuesObjectForValidation');
     
     if (
       Object.prototype.toString.call(val) !== '[object Array]' &&
@@ -85,13 +84,11 @@ export function buildTouchedObjectWithEveryValueSetToTrue(values) {
 
 export function groupErrors(errors) {
   p('groupErrors');
-  p(errors);
-  
   var errorsObject = {};
   for (let e of Object.keys(errors)) {
-    
+    debugger;
     if (errors[e].keyword === 'required') {
-      let path = errors[e].dataPath.substring(1).replace("/", ".") + '.' + errors[e].params.missingProperty;
+      let path = errors[e].dataPath ? errors[e].dataPath.substring(1).replace("/", ".") + '.' + errors[e].params.missingProperty : errors[e].params.missingProperty;
       _.set(
         errorsObject,
         path,

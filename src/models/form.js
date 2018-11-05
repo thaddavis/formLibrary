@@ -10,13 +10,34 @@ import {
 
 import merge from 'deepmerge'
 
-const _ = require('lodash');
-
 const p = console.log;
+
+function performValidationAndGroupErrors(payload) {
+  let ajv = instanceOfAjv();
+  const validate = ajv.compile(payload.schema);
+  let valid = validate(payload.values);
+  if (!valid) {
+    // console.log(validate.errors);
+  }
+  payload.valid = !validate.errors;
+  payload.errors = groupErrors(Object.assign({}, validate.errors));
+}
+
+function generateErrorsObjectForForm(payload) {
+  p('generateErrorsObjectForForm')
+  payload.values = payload.values || {};
+  assign(payload.values, payload.field, payload.value);
+  let preparedObject = prepareValues(payload.values, payload.field);
+  payload.values = preparedObject;
+  
+  performValidationAndGroupErrors(payload);
+}
+
 
 export default {
     state: {
-      editEmergencyContacts: {}
+      editEmergencyContacts: {},
+      createEssay: {}
     },
     reducers: {
         resetForm: (state, payload) => {
@@ -45,8 +66,6 @@ export default {
           };
         },
         setStateAfterChangeField: (state , payload) => {
-          p('setStateAfterChangeField')
-          p(payload);
           return {
             ...state,
             [payload.formId]: {
@@ -57,79 +76,47 @@ export default {
             },
           };
         },
-        setBlurField: (state, payload) => {
+        setStateAfterBlurField: (state, payload) => {
           return {
             ...state,
             [payload.formId]: {
               ...state[payload.formId],
-              touched: merge(state[payload.formId].touched || {}, payload.touched)
+              touched: merge(state[payload.formId].touched || {}, payload.touched),
+              errors: payload.errors
             }
           }
         },
     },
     effects: (dispatch) => ({
         async reset(payload, rootState) {
-
           dispatch.form.resetForm();
           return Promise.resolve();
-
         },
         async validateForm(payload, rootState) {
-          
-          let ajv = instanceOfAjv();
-          const validate = ajv.compile(payload.schema);
-          let valid = validate(payload.values);
-          if (!valid) {
-            // console.log(validate.errors);
-          }
-
-          payload.valid = !validate.errors;
-          payload.errors = groupErrors(Object.assign({}, validate.errors)); // need to group errors
+          performValidationAndGroupErrors(payload);
 
           let touched = buildTouchedObjectWithEveryValueSetToTrue(payload.values);
           payload.touched = touched
 
           dispatch.form.setValidationState(payload)
           return Promise.resolve();
-
         },
         async changeField(payload, rootState) {
-          p('changeField --- ');
-          p(JSON.stringify(payload));
-          
-          payload.values = payload.values || {};
+          p('changeField')
           payload.touched = payload.touched || {};
-          assign(payload.values, payload.field, payload.value);
-          let preparedObject = prepareValues(payload.values, payload.field);
-          payload.values = preparedObject;
-          p(payload.values);
-          
-          let ajv = instanceOfAjv();
-          const validate = ajv.compile(payload.schema);
-          let valid = validate(preparedObject);
-          if (!valid) {
-            // console.log(validate.errors);
-          }
-          
-          payload.valid = !validate.errors;
-          payload.errors = groupErrors(Object.assign({}, validate.errors));
 
-          p(payload);
-          dispatch.form.setStateAfterChangeField(
-            payload
-          )
+          generateErrorsObjectForForm(payload);
+
+          dispatch.form.setStateAfterChangeField(payload)
           return Promise.resolve();
-
         },
         async blurField(payload, rootState) {
-          p('blurField')
-          p(JSON.stringify(payload));
-          // p(payload)
-
           payload.touched = payload.touched || {};
           assign(payload.touched, payload.field, true);
 
-          dispatch.form.setBlurField(payload)
+          generateErrorsObjectForForm(payload);
+
+          dispatch.form.setStateAfterBlurField(payload)
           return Promise.resolve();
         },
     })

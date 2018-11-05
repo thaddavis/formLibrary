@@ -279,10 +279,6 @@ function mapStateToProps(state) {
       {
         id: '1',
         name: 'one'
-      },
-      {
-        id: '2',
-        name: 'two'
       }
     ],
     form: state.form.editEmergencyContacts,

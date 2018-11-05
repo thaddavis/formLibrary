@@ -1,6 +1,7 @@
 // import all schemas for ajv
 import emergencyContact from '../schemas/emergency-contact-schema.json';
 import emergencyContacts from '../schemas/emergency-contacts-schema.json';
+import essay from '../schemas/essay.json';
 const Ajv = require('ajv');
 
 export default function instantiateAjv() {
@@ -9,6 +10,7 @@ export default function instantiateAjv() {
     schemas: [
       emergencyContact,
       emergencyContacts,
+      essay
     ],
     allErrors: true,
     jsonPointers: true,

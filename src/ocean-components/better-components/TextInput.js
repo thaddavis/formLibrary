@@ -16,19 +16,29 @@ class TextInput extends React.Component {
   constructor(props) {
     super(props);
     
-    // p('TextInput2 --- props constructor');
-    // p(props);
-
     this.state = {
       value: ''
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
   }
 
-  // shouldComponentUpdate(nextProps) {
-  //   return true;
-  // }
+  static getDerivedStateFromProps(nextProps, prevState) {
+    p('getDerivedStateFromProps');
+    p(nextProps);
+    p(prevState);
+
+    // return {};
+
+    if (nextProps.touched && nextProps.touched[nextProps.path]) {
+      return {
+        value: get(nextProps.data, nextProps.path)
+      }
+    }
+
+    return {}
+  }
 
   handleChange(event) {
     const inputValue = event.currentTarget.value;
@@ -36,17 +46,24 @@ class TextInput extends React.Component {
     p(this.props.onChange(event, this.props.path, inputValue));
   }
 
+  handleBlur(event) {
+    const inputValue = event.currentTarget.value;
+    // this.setState({value: event.target.value});
+    p(this.props.onBlur(event, this.props.path, inputValue));
+  }
+
   render() {
 
     // p('render --- ')
     // p(this.props)
+    // debugger;
   
     return (
       <div>
         <div>
           {this.props.path}
         </div>
-        <input value={this.state.value} onChange={this.handleChange} />
+        <input value={this.state.value} onChange={this.handleChange} onBlur={this.handleBlur} />
         <div>
           {this.error()}
         </div>

@@ -86,7 +86,7 @@ export function groupErrors(errors) {
   p('groupErrors');
   var errorsObject = {};
   for (let e of Object.keys(errors)) {
-    debugger;
+    // debugger;
     if (errors[e].keyword === 'required') {
       let path = errors[e].dataPath ? errors[e].dataPath.substring(1).replace("/", ".") + '.' + errors[e].params.missingProperty : errors[e].params.missingProperty;
       _.set(

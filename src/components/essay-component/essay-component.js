@@ -42,6 +42,16 @@ class EssayForm extends XevoForm {
     });
   }
 
+  handleOnBlur(e, inputName, value) {
+    this.props.formActions.blurField({
+      formId: this.props.formId,
+      field: inputName,
+      value,
+      schema: this.props.schema,
+      values: this.props.form && this.props.form.values,
+    });
+  }
+
   handleSubmit(event) {
     alert('An essay was submitted: ' + JSON.stringify(this.props.form.values));
 
@@ -49,6 +59,9 @@ class EssayForm extends XevoForm {
   }
 
   render() {
+
+    p('render --- EssayForm')
+
     return (
       <form onSubmit={this.handleSubmit}>
         <div>

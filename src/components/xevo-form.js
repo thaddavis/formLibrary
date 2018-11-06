@@ -62,7 +62,7 @@ class XevoForm extends React.Component {
       const content = Object.keys(uiSchema.items).map((objKey, i) => {
         const Tmp = uiSchema.items[objKey].component;
         const newPath = props.path === '' ? objKey : `${props.path}.${objKey}`;
-        return <Tmp key={newPath} onBlur={props && props.onBlur} onChange={props && props.onChange} data={props && props.data} path={newPath} value={get(props && props.data, newPath)} errors={props && props.errors} touched={props && props.touched}/>;
+        return <Tmp key={newPath} onBlur={props && props.onBlur} onChange={props && props.onChange} data={props && props.data} path={newPath} value={get(props && props.data, newPath)} errors={props && props.errors} touched={props && props.touched} />;
       });
 
       return <div>{ content }</div>;

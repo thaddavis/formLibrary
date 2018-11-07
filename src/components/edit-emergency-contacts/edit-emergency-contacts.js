@@ -26,9 +26,10 @@ class EditEmergencyContactsForm extends XevoForm {
   async componentDidMount() {
     p('componentDidMount');
     const { data } = this.props;
-    if (data) {
+    if (this.props.form.values) {
+      
+    } else if (data) {
       this.setFormFields(data);
-    } else {
       p('HERE');
       try {
         // const res = await this.props.userActions.fetchUserEmergencyContact(this.props.userId);
@@ -37,6 +38,8 @@ class EditEmergencyContactsForm extends XevoForm {
         // logger.error('Something went wrong in edit-emergency-contact');
         // logger.error(error);
       }
+    } else {
+
     }
   }
 
@@ -56,6 +59,16 @@ class EditEmergencyContactsForm extends XevoForm {
       value,
       schema: this.props.schema,
       values: Object.assign({}, this.props.form && this.props.form.values),
+    });
+  }
+
+  handleOnBlur(e, inputName, value) {
+    this.props.formActions.blurField({
+      formId: this.props.formId,
+      field: inputName,
+      value,
+      schema: this.props.schema,
+      values: this.props.form && this.props.form.values,
     });
   }
 
@@ -102,8 +115,8 @@ function mapStateToProps(state) {
 
   return {
     data: [{
-      id: '1',
-      name: 'one'
+      // id: '1',
+      // name: 'one'
     }],
     formId: 'editEmergencyContacts',
     schema: emergencyContactsSchema, 

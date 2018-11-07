@@ -33,11 +33,15 @@ export function prepareValues(values, field) {
         )
       }
     } else {
-      for (let j of Object.keys(val)) {
-        recurse(
-          val[j],
-          path === '' ? (path + j) : (path + '.' + j)
-        )
+      if (Object.keys(val).length > 0) {
+        for (let j of Object.keys(val)) {
+          recurse(
+            val[j],
+            path === '' ? (path + j) : (path + '.' + j)
+          )
+        }  
+      } else {
+        _.set(finalVar, path, {});
       }
     }
 

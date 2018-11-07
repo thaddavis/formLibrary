@@ -25,13 +25,7 @@ class TextInput extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    p('getDerivedStateFromProps');
-    p(nextProps);
-    p(prevState);
-
-    // return {};
-
-    if (nextProps.touched && nextProps.touched[nextProps.path]) {
+    if (nextProps.touched && get(nextProps.touched, nextProps.path) && nextProps.data) {
       return {
         value: get(nextProps.data, nextProps.path)
       }

@@ -19,7 +19,6 @@ class XevoForm extends React.Component {
       value,
       schema: this.props.schema,
       values: this.props.form.values,
-      touched: this.props.form.touched,
     });
   }
 
@@ -37,7 +36,8 @@ class XevoForm extends React.Component {
     // p('renderUiSchema');
     // p(uiSchema);
     // p(props);
-    
+    // debugger;
+
     if (
       uiSchema.type === 'array'
     ) {

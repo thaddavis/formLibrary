@@ -1,5 +1,5 @@
 import axios from 'axios'
-import instanceOfAjv from '../helpers/instatiateAjv';
+import instanceOfAjv from '../helpers/instantiateAjv';
 import {
   assign, 
   isNormalInteger, 

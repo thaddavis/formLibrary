@@ -35,13 +35,16 @@ class TextInput extends React.Component {
   }
 
   handleChange(event) {
-    const inputValue = event.currentTarget.value;
-    this.setState({value: event.target.value});
+    p('checkbox --- handleChange');
+    p(event.target.checked);
+    // debugger;
+    const inputValue = event.target.checked === true ? true : false;
+    this.setState({value: inputValue});
     p(this.props.onChange(event, this.props.path, inputValue));
   }
 
   handleBlur(event) {
-    const inputValue = event.currentTarget.value;
+    const inputValue = event.target.checked === true ? true : false;
     // this.setState({value: event.target.value});
     p(this.props.onBlur(event, this.props.path, inputValue));
   }
@@ -54,10 +57,10 @@ class TextInput extends React.Component {
   
     return (
       <div>
-        <div>
+        <label>
           {this.props.path}
-        </div>
-        <input value={this.state.value} onChange={this.handleChange} onBlur={this.handleBlur} />
+        </label>
+        <input value={this.state.value} type="checkbox" onChange={this.handleChange} onBlur={this.handleBlur} />
         <div>
           {this.error()}
         </div>

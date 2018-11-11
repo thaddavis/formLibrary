@@ -1,7 +1,7 @@
 {  
   "$id": "emergencyContact",
   "type": "object",
-  "required": ["id", "name", "dayPhone", "email", "relationship"],
+  "required": ["name", "dayPhone", "email", "relationship"],
   "properties": {
     "id": {
       "type": "string"

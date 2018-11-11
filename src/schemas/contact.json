@@ -1,0 +1,45 @@
+{
+  "$id": "contact",
+  "type": "object",
+  "required": ["firstName", "lastName"],
+  "properties": {
+    "firstName": {
+      "type": "string",
+      "isNotEmpty": true
+    },
+    "middleName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string",
+      "isNotEmpty": true
+    },
+    "isMinor": {
+      "type": "boolean"
+    }
+  },
+  "anyOf": [
+    {
+      "properties": {
+        "isMinor": { "enum": [ false, null ] }
+      }
+    },
+    {  
+      "dependencies": {
+        "isMinor": {
+          "properties": {
+            "parentOrGuardianName": {
+              "type": "string",
+              "isNotEmpty": true
+            },
+            "parentOrGuardianPhone": {
+              "type": "string",
+              "isNotEmpty": true
+            }
+          },
+          "required": ["parentOrGuardianName", "parentOrGuardianPhone"]
+        }
+      }
+    }
+  ]
+}

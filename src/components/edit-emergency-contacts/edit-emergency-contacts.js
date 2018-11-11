@@ -73,7 +73,7 @@ class EditEmergencyContactsForm extends XevoForm {
   }
 
   handleSubmit(event) {
-    alert('An essay was submitted: ' + JSON.stringify(this.props.form.values));
+    alert('Submitted: ' + JSON.stringify(this.props.form.values));
     event.preventDefault();
   }
 

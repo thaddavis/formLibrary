@@ -1,0 +1,23 @@
+{
+  "$id": "address",
+  "type": "object",
+  "properties": {
+    "street": {
+      "type": "string",
+      "isNotEmpty": true
+    },
+    "city": {
+      "type": "string",
+      "isNotEmpty": true
+    },
+    "state": {
+      "type": "string",
+      "isNotEmpty": true
+    },
+    "zip": {
+      "type": "string",
+      "isNotEmpty": true
+    }
+  },
+  "additionalProperties": false
+}

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import XevoForm from '../xevo-form';
 
-import TextInput from '../../ocean-components/better-components/TextInput'
+import { TextInput } from '../../ocean-components/better-components'
 import Essay from '../../schemas/essay.json';
 import { prepareValues } from '../../helpers/helpersForAjv';
 
@@ -53,7 +53,7 @@ class EssayForm extends XevoForm {
   }
 
   handleSubmit(event) {
-    alert('An essay was submitted: ' + JSON.stringify(this.props.form.values));
+    alert('Submitted: ' + JSON.stringify(this.props.form.values));
 
     event.preventDefault();
   }

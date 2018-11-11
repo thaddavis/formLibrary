@@ -2,7 +2,7 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 import XevoForm from '../xevo-form';
-import TextInput from '../../ocean-components/better-components/TextInput.js';
+import { TextInput } from '../../ocean-components/better-components'
 import emergencyContactsSchema from '../../schemas/emergency-contact-schema.json';
 import { prepareValues } from '../../helpers/helpersForAjv';
 

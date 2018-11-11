@@ -37,7 +37,8 @@ function generateErrorsObjectForForm(payload) {
 export default {
     state: {
       editEmergencyContacts: {},
-      createEssay: {}
+      createEssay: {},
+      createPersonForm: {}
     },
     reducers: {
         resetForm: (state, payload) => {
@@ -86,6 +87,18 @@ export default {
             }
           }
         },
+        setStateAfterRemoveKey: (state, payload) => {
+          return {
+            ...state,
+            [payload.formId]: {
+              ...state[payload.formId],
+              valid: payload.valid,
+              values: payload.values,
+              errors: payload.errors,
+              touched: payload.touched
+            }
+          }
+        }
     },
     effects: (dispatch) => ({
         async reset(payload, rootState) {
@@ -119,5 +132,17 @@ export default {
           dispatch.form.setStateAfterBlurField(payload)
           return Promise.resolve();
         },
+        async removeKey(payload, rootState) {
+          payload.values = payload.values || {};
+          payload.touched = payload.touched || {};
+          
+          p('!!!!!!! removeKey !!!!!!!');
+          p(payload);
+
+          // generateErrorsObjectForForm(payload);
+          // dispatch.form.setStateAfterRemoveKey(payload)
+          
+          return Promise.resolve();
+        }
     })
 }

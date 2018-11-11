@@ -57,11 +57,36 @@ class XevoForm extends React.Component {
       const Tmp = uiSchema.items.type;
       const newPath = props.path === '' ? '0' : `${props.path}.${'0'}`;
       content.push(<Tmp key="0" onBlur={props && props.onBlur} onChange={props && props.onChange} data={props && props.data} path={newPath} value={get(props && props.data, newPath)} errors={props && props.errors} touched={props && props.touched}/>);
-      return <div>{ content }</div>;
+      return <div class="here">{ content }</div>;
     } else if (uiSchema.type === 'object') {
       const content = Object.keys(uiSchema.items).map((objKey, i) => {
         const Tmp = uiSchema.items[objKey].component;
         const newPath = props.path === '' ? objKey : `${props.path}.${objKey}`;
+
+        // p('***** NITISH *****');
+        // p(uiSchema.items[objKey]);
+        // p(props);
+        // p(newPath);
+        
+        if (uiSchema.items[objKey].dependsOn) {
+          
+          let showUiElement = true;
+          for (let i = 0; i < uiSchema.items[objKey].dependsOn.length; i++) {
+
+            if (!props.data[ uiSchema.items[objKey].dependsOn[i] ]) {
+              showUiElement = false;
+              break;
+            }
+
+          }
+
+          if (showUiElement) {
+            return <Tmp key={newPath} onBlur={props && props.onBlur} onChange={props && props.onChange} data={props && props.data} path={newPath} value={get(props && props.data, newPath)} errors={props && props.errors} touched={props && props.touched} />;
+          } else {
+            return null;
+          }
+        }
+
         return <Tmp key={newPath} onBlur={props && props.onBlur} onChange={props && props.onChange} data={props && props.data} path={newPath} value={get(props && props.data, newPath)} errors={props && props.errors} touched={props && props.touched} />;
       });
 
@@ -76,11 +101,7 @@ class XevoForm extends React.Component {
 
   render() {
 
-    return (
-      <div>
-        { this.renderUiSchema() }
-      </div>
-    );
+    return this.renderUiSchema();
 
   }
 }

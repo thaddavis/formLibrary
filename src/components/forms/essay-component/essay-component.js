@@ -2,11 +2,16 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 
-import XevoForm from '../xevo-form';
+import FormHeader from '../sharedFormComponents/form-header/form-header.js';
+import FormFooter from '../sharedFormComponents/form-footer/form-footer.js';
 
-import { TextInput } from '../../ocean-components/better-components'
-import Essay from '../../schemas/essay.json';
-import { prepareValues } from '../../helpers/helpersForAjv';
+import XevoForm from '../../xevo-form';
+
+import { TextInput } from '../../../ocean-components/better-components'
+import Essay from '../../../schemas/essay.json';
+import { prepareValues } from '../../../helpers/helpersForAjv';
+
+import CSS from '../sharedFormStyles/formBody.module.sass';
 
 const p = console.log;
 
@@ -63,28 +68,43 @@ class EssayForm extends XevoForm {
     p('render --- EssayForm')
 
     return (
-      <form onSubmit={this.handleSubmit}>
-        <div>
-          {
-            this.renderUiSchema(uiSchema, {
-              onBlur: this.handleOnBlur,
-              onChange: this.handleOnChange,
-              path: '',
-              data: prepareValues(this.props.form.values, uiSchema.type === 'array' ? '0' : ''),
-              errors: this.props.form.errors,
-              touched: this.props.form.touched,
-            })
-          }
+      <div>
+        <FormHeader
+          title="Create an Essay"
+        ></FormHeader>
+        <div className={CSS.formContainer}>
+          <form className={CSS.form} onSubmit={this.handleSubmit}>
+            {
+              this.renderUiSchema(uiSchema, {
+                onBlur: this.handleOnBlur,
+                onChange: this.handleOnChange,
+                path: '',
+                data: prepareValues(this.props.form.values, uiSchema.type === 'array' ? '0' : ''),
+                errors: this.props.form.errors,
+                touched: this.props.form.touched,
+              })
+            }
+            
+            <FormFooter
+              loading={false}
+              onCancel={(evt) => {
+                console.log('onCancel');
+                evt.preventDefault();
+                this.props.history.goBack();
+              }}
+              onSave={(evt) => {
+                console.log('onSave');
+                this.handleSubmit(evt);
+              }}
+              cancelBtnLabel="Cancel"
+              saveBtnLabel="Save"
+              cancelButtonDisable={false}
+              saveButtonDisable={!this.props.form.valid}
+              containerStyles=""
+            ></FormFooter>  
+          </form>
         </div>
-        <div>
-          <button type="submit" disabled={!this.props.form.valid}>
-            Submit
-          </button>
-          {/* <button type="button" disabled={pristine || submitting} onClick={reset}>
-            Clear Values
-          </button> */}
-        </div>
-      </form>
+      </div>
     )
   }
 }

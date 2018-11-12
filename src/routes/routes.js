@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
-import ShowPersonalInformation from '../components/show-personal-info';
-import EditEmergencyContactsInformation from '../components/edit-emergency-contacts/edit-emergency-contacts';
-import EssayComponent from '../components/essay-component/essay-component';
+import EditEmergencyContactsInformation from '../components/forms/edit-emergency-contacts/edit-emergency-contacts';
+import EssayComponent from '../components/forms/essay-component/essay-component';
 import HomeComponent from '../components/home-component/home-component';
-import CreatePersonComponent from '../components/create-person-component/create-person-component';
+import CreatePersonForm from '../components/forms/create-person/create-person';
 
 export default class MainRoutes extends Component {
     constructor(props) {
@@ -24,7 +23,7 @@ export default class MainRoutes extends Component {
           <Switch>
             <Route path={'/essay'} component={EssayComponent} />
             <Route path={'/edit-emergency-contacts'} component={EditEmergencyContactsInformation} />
-            <Route path={'/create-person'} component={CreatePersonComponent} />
+            <Route path={'/create-person'} component={CreatePersonForm} />
             <Route path={'/'} component={HomeComponent} />
             {/* <Route path={'/'} component={ShowPersonalInformation} /> */}
           </Switch>

@@ -56,7 +56,7 @@ class TextInput extends React.Component {
 
     const containerClass = classnames(
       { [CSS.textInputContainer]: this.state.focused || this.state.value },
-      { [CSS.textInputContainerIsFocusedOrHasValues]: !this.state.focused && !this.state.value }
+      { [CSS.textInputContainerIsNotFocusedOrDoesNotHaveValues]: !this.state.focused && !this.state.value }
     );
 
     const inputClass = classnames(

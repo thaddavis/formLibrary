@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // styles
-import CSS from './form-loader.sass'
+import CSS from './footer-loader.module.sass'
 
 function FormLoader({ showLoader }) {
   const className =[CSS.formLoader]

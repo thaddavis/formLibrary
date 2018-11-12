@@ -44,6 +44,12 @@ export default {
         resetForm: (state, payload) => {
           return {
             ...state,
+            [payload.formId]: {
+              valid: false,
+              values: undefined,
+              touched: undefined,
+              errors: undefined
+            }
           }
         },
         setFields: (state, payload) => {
@@ -102,7 +108,7 @@ export default {
     },
     effects: (dispatch) => ({
         async reset(payload, rootState) {
-          dispatch.form.resetForm();
+          dispatch.form.resetForm(payload);
           return Promise.resolve();
         },
         async validateForm(payload, rootState) {

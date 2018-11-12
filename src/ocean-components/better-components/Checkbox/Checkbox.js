@@ -56,7 +56,7 @@ class CheckboxInput extends React.Component {
 
     const containerClass = classnames(
       { [CSS.checkboxInputContainer]: this.state.focused || this.state.value },
-      { [CSS.checkboxInputContainerIsFocusedOrHasValues]: !this.state.focused && !this.state.value }
+      { [CSS.checkboxInputContainerIsNotFocusedOrDoesNotHaveValues]: !this.state.focused && !this.state.value }
     );
 
     const inputClass = classnames(

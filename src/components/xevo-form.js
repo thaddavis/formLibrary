@@ -49,7 +49,6 @@ class XevoForm extends React.Component {
           content.push(<Tmp key={i} onBlur={props && props.onBlur} onChange={props && props.onChange} data={props && props.data} path={newPath} value={get(props && props.data, newPath)} errors={props && props.errors} touched={props && props.touched} />);
         }
         return <div>
-          <hr />
           { content }
         </div>;
       }

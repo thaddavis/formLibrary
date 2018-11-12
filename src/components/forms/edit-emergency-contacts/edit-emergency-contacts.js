@@ -1,10 +1,17 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
-import XevoForm from '../xevo-form';
+import XevoForm from '../../xevo-form';
 import EditEmergencyContactInfo from '../edit-emergency-contact/edit-emergency-contact.js';
-import emergencyContactsSchema from '../../schemas/emergency-contacts-schema.json';
-import { prepareValues } from '../../helpers/helpersForAjv';
+import emergencyContactsSchema from '../../../schemas/emergency-contacts-schema.json';
+import { prepareValues } from '../../../helpers/helpersForAjv';
+
+import FormHeader from '../sharedFormComponents/form-header/form-header.js';
+import FormFooter from '../sharedFormComponents/form-footer/form-footer.js';
+
+import { withRouter } from 'react-router-dom';
+
+import CSS from '../sharedFormStyles/formBody.module.sass';
 
 const p = console.log;
 
@@ -44,9 +51,10 @@ class EditEmergencyContactsForm extends XevoForm {
   }
 
   async setFormFields(data) {
-    await this.props.formActions.setFields({
+    await this.props.formActions.validateForm({
       formId: this.props.formId,
-      values: data
+      values: data,
+      schema: emergencyContactsSchema
     });
 
     // this.props.disableSave((this.props.form && !this.props.form.valid) || true);
@@ -74,36 +82,50 @@ class EditEmergencyContactsForm extends XevoForm {
 
   handleSubmit(event) {
     alert('Submitted: ' + JSON.stringify(this.props.form.values));
+    this.props.formActions.resetForm({formId: this.props.formId});
+    this.props.history.goBack();
     event.preventDefault();
   }
 
   render() {
     return (
       <div>
-        Edit Emergency Contacts Form
-        <form onSubmit={this.handleSubmit}>
-          <div>
+        <FormHeader
+          title="Edit Emergency Contacts Form"
+        ></FormHeader>
+        <div className={CSS.formContainer}>
+          <form className={CSS.form}>
             {
               this.renderUiSchema(uiSchema, {
                 onBlur: this.handleOnBlur,
                 onChange: this.handleOnChange,
                 path: '',
                 data: prepareValues(this.props.form.values, uiSchema.type === 'array' ? '0' : ''),
+                // data: prepareValues(this.props.form, uiSchema.type === 'array' ? '0' : ''),
                 // data: this.props.data,
                 errors: this.props.form.errors,
                 touched: this.props.form.touched,
               })
             }
-          </div>
-          <div>
-            <button type="submit" disabled={!this.props.form.valid}>
-              Submit
-            </button>
-            {/* <button type="button" disabled={pristine || submitting} onClick={reset}>
-              Clear Values
-            </button> */}
-          </div>
-        </form>
+            <FormFooter
+              loading={false}
+              onCancel={(evt) => {
+                console.log('onCancel');
+                evt.preventDefault();
+                this.props.history.goBack();
+              }}
+              onSave={(evt) => {
+                console.log('onSave');
+                this.handleSubmit(evt);
+              }}
+              cancelBtnLabel="Cancel"
+              saveBtnLabel="Save"
+              cancelButtonDisable={false}
+              saveButtonDisable={!this.props.form.valid}
+              containerStyles=""
+            ></FormFooter>
+          </form>
+        </div>
       </div>
     )
   }
@@ -115,8 +137,8 @@ function mapStateToProps(state) {
 
   return {
     data: [{
-      // id: '1',
-      // name: 'one'
+      id: '1',
+      name: 'one'
     }],
     formId: 'editEmergencyContacts',
     schema: emergencyContactsSchema, 
@@ -130,10 +152,11 @@ function mapDispatchToProps(dispatch) {
       blurField: dispatch.form.blurField,
       changeField: dispatch.form.changeField,
       setFields: dispatch.form.setFields,
+      resetForm: dispatch.form.reset,
       validateForm: dispatch.form.validateForm,
     }
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditEmergencyContactsForm);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditEmergencyContactsForm));
 

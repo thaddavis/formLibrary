@@ -2,15 +2,8 @@ import React from 'react';
 
 import get from 'lodash/get';
 import classnames from 'classnames';
-import set from 'lodash/set';
 
 import CSS from './TextInput.module.sass';
-
-// Helpers
-// import { isEmailValid } from 'helpers/signup-helper';
-
-// Components
-// import PasswordValidation from '../password-validation/password-validation';
 
 const p = console.log;
 
@@ -47,21 +40,16 @@ class TextInput extends React.Component {
   handleBlur(event) {
     this.setState({ focused: false });
     const inputValue = event.currentTarget.value;
-    // this.setState({value: event.target.value});
     p(this.props.onBlur(event, this.props.path, inputValue));
   }
 
   handleFocus(event) {
-    p('handleFocus')
     this.inputRef.focus();
     this.setState({ focused: true });  
   }
 
   render() {
 
-    p('render --- ')
-    p(this.state)
-    
     const labelClass = classnames(
       CSS.labelText
     );

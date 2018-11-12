@@ -1,0 +1,46 @@
+@import 'variables'
+
+.formLoader
+  width: 100%
+  height: 100%
+  background-color: $transparent-white-shade-2
+  position: absolute
+  z-index: 1
+  visibility: hidden
+
+.loaderLine
+  height: 0.25rem
+  background: $dark-ocean
+
+.aLoop
+  animation-name: loop
+  animation-duration: 1.7s
+  animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1)
+  animation-delay: initial
+  animation-iteration-count: infinite
+  animation-direction: initial
+  animation-fill-mode: initial
+  animation-play-state: initial
+
+@keyframes loop
+  0%
+    width: 0%
+    transform: translateX(0%)
+  7%
+    width: 10%
+    transform: translateX(0%)
+  40%
+    width: 60%
+  50%
+    transform: translateX(85%)
+  75%
+    width: 100%
+  100%
+    transform: translateX(100%)
+
+.open
+  visibility: visible
+  transition: all 0.5s
+.close
+  visibility: hidden
+  transition: all 0.5s

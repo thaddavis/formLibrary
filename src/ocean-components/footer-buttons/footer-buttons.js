@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// import Style from './footer-buttons.sass';
+import Style from './footer-buttons.module.sass';
 
 export default function FooterButtons(props) {
   const buttonStyle = props.saveButtonDisable ? 'inactive' : 'active';
@@ -10,7 +10,7 @@ export default function FooterButtons(props) {
       <button
         id="footer_buttons_cancel"
         disabled={ props.cancelButtonDisable }
-        // className={ `${ Style.button } ${ Style[props.cancelBtnStyle] }` }
+        className={ `${ Style.button } ${ Style[props.cancelBtnStyle] }` }
         onClick={ props.cancelBtnOnClick }
       >
         { props.cancelBtnLabel }
@@ -18,7 +18,7 @@ export default function FooterButtons(props) {
 
       <button
         disabled={ props.saveButtonDisable }
-        // className={ `${ Style.button } ${ Style[buttonStyle] }` }
+        className={ `${ Style.button } ${ Style[buttonStyle] }` }
         onClick={ props.saveBtnOnClick }
         id="footer_buttons_save"
       >

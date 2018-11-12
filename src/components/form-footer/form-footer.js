@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { 
-    FooterButtons, 
-    // FormLoader 
-} from '../../ocean-components';
+import FooterButtons from '../../ocean-components/footer-buttons/footer-buttons';
+// import FormLoader from '../../ocean-components/form-loader/form-loader';
 
 // import i18n from 'utils/i18n/i18n';
 
-// import CSS from './form-footer.sass';
+import CSS from './form-footer.module.sass';
 
 class FormFooter extends Component {
   render() {

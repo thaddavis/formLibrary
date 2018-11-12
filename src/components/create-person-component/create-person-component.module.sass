@@ -1,0 +1,83 @@
+// @import '../styles/sass/_bulma-config.sass'
+
+@import '../../styles/sass/_vars.sass'
+@import '../../styles/sass/_bulma-config.sass'
+
+// @import 'styles/css/vars.sass'
+
+.formContainer
+  display: flex
+  justify-content: center
+  padding-top: 2rem
+  padding-bottom: 2rem
+  min-width: 30rem;
+
+.form
+  width: 50%
+
+.container
+  display: flex
+  flex-direction: column
+  justify-content: center
+  max-width: 35.9375rem
+  min-width: 30rem
+  padding-bottom: 10rem
+  padding-top: 2.6rem
+  @include mobile()
+    min-width: 18rem
+    padding-right: 1rem
+
+
+.modalHeader
+  width: 100%
+  height: 4.37rem
+  border-bottom: 0.0675rem solid $mercury
+  display: flex
+  align-items: center
+
+.backIcon
+  width: 1.2rem
+  height: 1.1rem
+  cursor: pointer
+  margin-right: 2%
+
+.headerTitle
+  font-size: 1rem
+  color: $resolution-blue
+  letter-spacing: 0
+  text-align: center
+  line-height: 1.5rem
+  font-weight: 500
+  &.center
+    margin-left: auto
+    margin-right: auto
+  &.isHiddenTablet
+    @media (max-width: 1024px)
+      display: none
+
+.backContainer
+  position: absolute
+  display: flex
+  justify-content: flex-start
+  align-items: center
+  margin-left: 3%
+  width: 12.8rem
+  cursor: pointer
+
+.footer
+  display: flex
+  justify-content: center
+  position: fixed
+  align-items: center
+  bottom: 0
+  left: 0
+  width: 100%
+  height: 5.375rem
+  background-color: $white
+  box-shadow: 0.0625rem 0rem 1rem 0 rgba(0,0,0,0.20)
+
+.buttons
+  display: flex
+  justify-content: center
+  height: 50px
+  width: 360px

@@ -1,15 +1,18 @@
 import React from 'react';
-
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import XevoForm from '../xevo-form';
 
 import { TextInput, Checkbox } from '../../ocean-components/better-components/index';
+import FormFooter from '../form-footer/form-footer.js';
 
 import Contact from '../../schemas/contact.json';
 import { prepareValues } from '../../helpers/helpersForAjv';
 
-import CSS from './create-person-component.sass';
+import BackIcon from '../../styles/svg/back_arrow.svg';
+
+import CSS from './create-person-component.module.sass';
 
 const p = console.log;
 
@@ -52,6 +55,8 @@ class CreatePersonForm extends XevoForm {
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handleOnBlur = this.handleOnBlur.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.goBack = this.goBack.bind(this);
   }
 
   handleOnChange(e, inputName, value) {
@@ -83,6 +88,12 @@ class CreatePersonForm extends XevoForm {
     event.preventDefault();
   }
 
+  goBack() {
+    
+    this.props.history.goBack();
+    
+  }
+
   renderFormTitle(title) {
     return (
       <div className={CSS.formTitle}>
@@ -91,34 +102,74 @@ class CreatePersonForm extends XevoForm {
     );
   }
 
+  // 
+  renderHeader() {
+    // const backText = this.props.shouldUseGoBack ? '' : (this.props.backTextOverride || i18n.t(this.props.backText));
+    const backText = 'Back';
+    const hasBackButton = true;
+
+    return (
+      <div className={CSS.modalHeader}>
+        <span
+          role="landmark"
+          tabIndex={0}
+          aria-label={backText}
+          // onKeyDown={onKey('13 32', this.goBack, false)}
+          className={CSS.backContainer}
+          onClick={this.goBack}
+          id="form_view_back_button"
+        >
+          {hasBackButton && <img className={CSS.backIcon} src={BackIcon} alt="go back" />}
+          <span className={`${CSS.headerTitle} ${CSS.isHiddenTablet}`} >
+            {backText}
+          </span>
+        </span>
+        <h1
+          role="heading"
+          tabIndex={0}
+          aria-label={this.props.titleOverride}
+          className={`${CSS.headerTitle} ${CSS.center}`}>
+          {this.props.titleOverride}
+          createPersonForm
+        </h1>
+      </div>
+    );
+  }
+  // 
+
   render() {
     p('render --- CreatePersonForm')
 
     return (
-      <div className="container">
-        { this.renderFormTitle(this.props.formId) }
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            {
-              this.renderUiSchema(uiSchema, {
-                onBlur: this.handleOnBlur,
-                onChange: this.handleOnChange,
-                path: '',
-                data: prepareValues(this.props.form.values, uiSchema.type === 'array' ? '0' : ''),
-                errors: this.props.form.errors,
-                touched: this.props.form.touched,
-              })
-            }
-          </div>
-          <div>
-            <button type="submit" disabled={!this.props.form.valid}>
-              Submit
-            </button>
-            {/* <button type="button" disabled={pristine || submitting} onClick={reset}>
-              Clear Values
-            </button> */}
-          </div>
-        </form>
+      <div>
+        { this.renderHeader(this.props.formId) }
+        <div className={CSS.formContainer}>
+          <form className={CSS.form} onSubmit={this.handleSubmit}>
+            <div>
+              {
+                this.renderUiSchema(uiSchema, {
+                  onBlur: this.handleOnBlur,
+                  onChange: this.handleOnChange,
+                  path: '',
+                  data: prepareValues(this.props.form.values, uiSchema.type === 'array' ? '0' : ''),
+                  errors: this.props.form.errors,
+                  touched: this.props.form.touched,
+                })
+              }
+            </div>
+            <div>
+              <FormFooter></FormFooter>
+            </div>
+            {/* <div>
+              <button type="submit" disabled={!this.props.form.valid}>
+                Submit
+              </button>
+              <button type="button" disabled={pristine || submitting} onClick={reset}>
+                Clear Values
+              </button>
+            </div> */}
+          </form>
+        </div>
       </div>
     )
   }
@@ -148,5 +199,5 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreatePersonForm);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CreatePersonForm));
 

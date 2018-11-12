@@ -1,0 +1,26 @@
+@import '../../styles/sass/_vars.sass'
+@import '../../styles/ocean-components/_mixins.sass'
+@import '../../styles/ocean-components/_variables.sass'
+
+.button
+  min-height: 3rem
+  min-width: 10.5rem
+  margin: 0.125rem 0.31rem 0.125rem 0.31rem
+  border-radius: 1.5625rem
+  font-weight: 700
+  color: $dark-ocean
+  background-color: $white
+  border: $dark-ocean 0.0625rem solid
+  cursor: pointer
+  @include until(400px)
+    min-width: 8.5rem
+  &:disabled
+    border: $blue-inactive 0.0625rem solid
+    color: $blue-inactive
+  &.active
+    color: $white
+    background-color: $dark-ocean
+  &.inactive
+    color: $white
+    background-color: $blue-inactive
+    border: $blue-inactive 0.0625rem solid

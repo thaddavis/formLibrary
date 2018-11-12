@@ -2,17 +2,12 @@ import React from 'react';
 
 import get from 'lodash/get';
 import classnames from 'classnames';
-import set from 'lodash/set';
 
-// Helpers
-// import { isEmailValid } from 'helpers/signup-helper';
-
-// Components
-// import PasswordValidation from '../password-validation/password-validation';
+import CSS from './Checkbox.module.sass';
 
 const p = console.log;
 
-class TextInput extends React.Component {
+class CheckboxInput extends React.Component {
   constructor(props) {
     super(props);
     
@@ -20,8 +15,10 @@ class TextInput extends React.Component {
       value: ''
     };
 
+    this.inputRef = {};
     this.handleChange = this.handleChange.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
+    this.handleFocus = this.handleFocus.bind(this);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -35,32 +32,57 @@ class TextInput extends React.Component {
   }
 
   handleChange(event) {
-    p('checkbox --- handleChange');
-    p(event.target.checked);
-    // debugger;
     const inputValue = event.target.checked === true ? true : false;
     this.setState({value: inputValue});
-    p(this.props.onChange(event, this.props.path, inputValue));
+    this.props.onChange(event, this.props.path, inputValue);
   }
 
   handleBlur(event) {
+    this.setState({ focused: false });
     const inputValue = event.target.checked === true ? true : false;
-    // this.setState({value: event.target.value});
-    p(this.props.onBlur(event, this.props.path, inputValue));
+    this.props.onBlur(event, this.props.path, inputValue);
+  }
+
+  handleFocus(event) {
+    this.inputRef.focus();
+    this.setState({ focused: true });  
   }
 
   render() {
 
-    // p('render --- ')
-    // p(this.props)
-    // debugger;
+    const labelClass = classnames(
+      CSS.labelText
+    );
+
+    const containerClass = classnames(
+      { [CSS.checkboxInputContainer]: this.state.focused || this.state.value },
+      { [CSS.checkboxInputContainerIsFocusedOrHasValues]: !this.state.focused && !this.state.value }
+    );
+
+    const inputClass = classnames(
+      CSS.checkboxInput,
+      { [CSS.error]: get(this.props.errors, this.props.path) }
+    );
   
     return (
-      <div>
-        <label>
+      <div
+        className={containerClass}
+      >
+        <input value={this.state.value} 
+          type="checkbox" 
+          onBlur={this.handleBlur} 
+          onChange={this.handleChange} 
+          onFocus={this.handleFocus}
+          className={inputClass}
+          ref={(ref) => this.inputRef = ref}
+        />
+        <span className={CSS.bar}></span>
+        <label className={labelClass}
+          onFocus={this.handleFocus}
+          onClick={this.handleFocus}
+        >
           {this.props.path}
         </label>
-        <input value={this.state.value} type="checkbox" onChange={this.handleChange} onBlur={this.handleBlur} />
         <div>
           {this.error()}
         </div>
@@ -90,4 +112,4 @@ class TextInput extends React.Component {
   
 }
 
-export default TextInput;
+export default CheckboxInput;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import XevoForm from '../../xevo-form';
+import JuiceForm from '../../juice-form';
 
 import { withRouter } from 'react-router-dom';
 
@@ -48,42 +48,22 @@ const uiSchema = {
   },
 };
 
-class CreatePersonForm extends XevoForm {
+class CreatePersonForm extends JuiceForm {
   constructor(props) {
     super(props);
     
-    this.handleOnChange = this.handleOnChange.bind(this);
-    this.handleOnBlur = this.handleOnBlur.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleOnChange(e, inputName, value) {
-    this.props.formActions.changeField({
-      formId: this.props.formId,
-      field: inputName,
-      value,
-      schema: this.props.schema,
-      values: Object.assign({}, this.props.form && this.props.form.values),
-    });
-  }
-
-  handleOnBlur(e, inputName, value) {
-    this.props.formActions.blurField({
-      formId: this.props.formId,
-      field: inputName,
-      value,
-      schema: this.props.schema,
-      values: this.props.form && this.props.form.values,
-    });
   }
 
   handleSubmit(event) {
     console.log('handleSubmit');
     alert('Submitted: ' + JSON.stringify(this.props.form.values));
 
-    this.props.formActions.resetForm({formId: this.props.formId});
-    this.props.history.goBack();
-
+    this.props.formActions.resetForm({
+      formId: this.props.formId,
+      values: this.props.form && this.props.form.values,
+    });
+    
     event.preventDefault();
   }
 

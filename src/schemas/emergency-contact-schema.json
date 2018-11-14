@@ -17,9 +17,23 @@
       "isNotEmpty": true
     },
     "email": {
-      "type": "string"
+      "type": "string",
+      "format": "email"
     },
-    "relationship": { "type": "string" }
+    "relationship": { 
+      "type": "string",
+      "enum": [
+        "",
+        "Dependent", 
+        "Sibling", 
+        "Parent", 
+        "Friend", 
+        "Guardian", 
+        "Child",
+        "Relative",
+        "Spouse_Significant_Other"
+      ]
+    }
   },
   "additionalProperties": false
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
-import XevoForm from '../../xevo-form';
+import JuiceForm from '../../juice-form';
 import { TextInput } from '../../../ocean-components/better-components'
 import emergencyContactsSchema from '../../../schemas/emergency-contact-schema.json';
 import { prepareValues } from '../../../helpers/helpersForAjv';
@@ -30,7 +30,7 @@ const uiSchema = {
   },
 };
 
-class EditEmergencyContactForm extends XevoForm {
+class EditEmergencyContactForm extends JuiceForm {
   constructor(props) {
     super(props);
   }

@@ -6,6 +6,8 @@ import EssayComponent from '../components/forms/essay-component/essay-component'
 import HomeComponent from '../components/home-component/home-component';
 import CreatePersonForm from '../components/forms/create-person/create-person';
 
+import { EditEmergencyContactInfoView } from '../components/juice-forms/profile/profile-formviews'
+
 export default class MainRoutes extends Component {
     constructor(props) {
       super(props);
@@ -21,6 +23,7 @@ export default class MainRoutes extends Component {
       return (
         <Router history={this.history} >
           <Switch>
+            <Route exact path={'/xevo-form-edit-emergency-contacts'} component={EditEmergencyContactInfoView} />
             <Route path={'/essay'} component={EssayComponent} />
             <Route path={'/edit-emergency-contacts'} component={EditEmergencyContactsInformation} />
             <Route path={'/create-person'} component={CreatePersonForm} />

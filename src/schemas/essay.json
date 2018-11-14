@@ -5,12 +5,12 @@
   "properties": {
     "author": {
       "type": "string",
-      "minLength": 3,
+      "minLength": 1,
       "isNotEmpty": true
     },
     "content": {
       "type": "string",
-      "minLength": 3,
+      "minLength": 1,
       "isNotEmpty": true
     }
   },

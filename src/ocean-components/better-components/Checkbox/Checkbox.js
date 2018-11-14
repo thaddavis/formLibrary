@@ -22,13 +22,15 @@ class CheckboxInput extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.touched && get(nextProps.touched, nextProps.path) && nextProps.data) {
+
+    // if (nextProps.touched && get(nextProps.touched, nextProps.path) && nextProps.data) {
       return {
         value: get(nextProps.data, nextProps.path)
       }
-    }
+    // }
 
-    return {}
+    // return {}
+    
   }
 
   handleChange(event) {
@@ -68,8 +70,9 @@ class CheckboxInput extends React.Component {
       <div
         className={containerClass}
       >
-        <input value={this.state.value} 
-          type="checkbox" 
+        <input 
+          type="checkbox"
+          checked={!!this.state.value}
           onBlur={this.handleBlur} 
           onChange={this.handleChange} 
           onFocus={this.handleFocus}

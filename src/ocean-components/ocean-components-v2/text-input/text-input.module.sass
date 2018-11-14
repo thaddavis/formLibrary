@@ -1,12 +1,12 @@
 @import '../../../styles/ocean-components/mixins'
 @import '../../../styles/ocean-components/variables'
 
-.checkboxInputContainer
+.textInputContainer
   height: 3.8rem
   width: 100%
   align-self: center
   margin-top: 0.5rem
-  .checkboxInput
+  .textInput
     height: 1.5rem
     width: 100%
     border: 0
@@ -28,7 +28,7 @@
             font-size: 0.687rem
             transition: 0.2s ease all
 
-.checkboxInputContainerIsNotFocusedOrDoesNotHaveValues
+.textInputContainerIsNotFocusedOrDoesNotHaveValues
   height: 3.8rem
   width: 100%
   align-self: center
@@ -39,8 +39,8 @@
   display: inherit
   color: rgba(0,0,0,0.5)
   font-size: 0.93rem
-  margin-bottom: 0.5rem
   transition: 0.2s ease all
+  bottom: 1.25rem
 
 .errorMessage
   color: $bright-red
@@ -48,10 +48,10 @@
   letter-spacing: 0
   align-self: flex-start
   position: relative
-  bottom: 0.8rem
+  bottom: 0.7rem
   // margin-top: .4rem
 
-.checkboxInput
+.textInput
   // padding: 0.625rem 0.625rem 0.625rem 0.31rem
   display: block
   width: 100%
@@ -72,7 +72,7 @@
   -moz-transition: 0.2s ease all
   -webkit-transition: 0.2s ease all
 
-.checkboxInput
+.textInput
   &:focus ~ .label, &.true ~ .label
     top: -1.25rem
     font-size: 0.875rem
@@ -100,7 +100,7 @@
   &:after
     right: 50%
 
-.checkboxInput:focus ~ .bar
+.textInput:focus ~ .bar
   &:before, &:after
     width: 50%
 

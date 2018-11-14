@@ -1,108 +1,125 @@
 import React from 'react';
-import get from 'lodash/get';
+import { connect } from 'react-redux';
 
 const p = console.log;
 
 class XevoForm extends React.Component {
+
   constructor(props) {
     super(props);
 
+    this.state = {}
     this.handleOnBlur = props.onBlur ? props.onBlur : this.handleOnBlur.bind(this);
     this.handleOnChange = props.onChange ? props.onChange : this.handleOnChange.bind(this);
-    this.renderUiSchema = this.renderUiSchema.bind(this);
   }
 
-  async handleOnBlur(e, inputName, value) {
-    await this.props.blurField({
-      formId: this.props.formId,
-      field: inputName,
-      value,
-      schema: this.props.schema,
-      values: this.props.form.values,
-    });
-  }
-
-  async handleOnChange(e, inputName, value) {
-    await this.props.changeField({
-      formId: this.props.formId,
-      field: inputName,
-      value,
-      schema: this.props.schema,
-      values: this.props.form.values,
-    });
-  }
-
-  renderUiSchema(uiSchema, props) {
-    // p('renderUiSchema');
-    // p(uiSchema);
-    // p(props);
-    // debugger;
-
-    if (
-      uiSchema.type === 'array'
-    ) {
-      const content = [];
-      if (props.data) {
-        for (let i = 0; i < props.data.length; i += 1) {
-          const Tmp = uiSchema.items.type;
-          const newPath = props.path === '' ? i.toString() : `${props.path}.${i}`;
-          content.push(<Tmp key={i} onBlur={props && props.onBlur} onChange={props && props.onChange} data={props && props.data} path={newPath} value={get(props && props.data, newPath)} errors={props && props.errors} touched={props && props.touched} />);
-        }
-        return <div>
-          { content }
-        </div>;
+  renderWrappedChildren(children) {
+    return React.Children.map(children, (child) => {
+      // This is support for non-node elements (eg. pure text), they have no props
+      if (!React.isValidElement(child)) {
+        return child
       }
+  
+      if (child.props.children && child.props.formKey) {
+        return React.cloneElement(child, {
+          children: this.renderWrappedChildren(child.props.children),
+          onChange: this.handleOnChange,
+          onBlur: this.handleOnBlur,
+          data: this.props.form ? this.props.form.values : undefined,
+          errors: this.props.form ? this.props.form.errors : undefined,
+          touched: this.props.form ? this.props.form.touched : undefined
+        })
+      } else if (child.props.children) {
+        return React.cloneElement(child, {
+          children: this.renderWrappedChildren(child.props.children),
+        })
+      } else if (child.props.formKey) {
+        return React.cloneElement(child, {
+          onChange: this.handleOnChange,
+          onBlur: this.handleOnBlur,
+          data: this.props.form ? this.props.form.values : undefined,
+          errors: this.props.form ? this.props.form.errors : undefined,
+          touched: this.props.form ? this.props.form.touched : undefined
+        })
+      } else {
+        return React.cloneElement(child, {})
+      }
+      
+    })
+  }
 
-      const Tmp = uiSchema.items.type;
-      const newPath = props.path === '' ? '0' : `${props.path}.${'0'}`;
-      content.push(<Tmp key="0" onBlur={props && props.onBlur} onChange={props && props.onChange} data={props && props.data} path={newPath} value={get(props && props.data, newPath)} errors={props && props.errors} touched={props && props.touched}/>);
-      return <div class="here">{ content }</div>;
-    } else if (uiSchema.type === 'object') {
-      const content = Object.keys(uiSchema.items).map((objKey, i) => {
-        const Tmp = uiSchema.items[objKey].component;
-        const newPath = props.path === '' ? objKey : `${props.path}.${objKey}`;
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return {}
+  }
 
-        // p('***** NITISH *****');
-        // p(uiSchema.items[objKey]);
-        // p(props);
-        // p(newPath);
-        
-        if (uiSchema.items[objKey].dependsOn) {
-          
-          let showUiElement = true;
-          for (let i = 0; i < uiSchema.items[objKey].dependsOn.length; i++) {
+  shouldComponentUpdate(nextProps, nextState) {
+    // p('shouldComponentUpdate')
+    // p(nextProps);
+    // p(nextState);
+    
+    // if (nextProps.form && nextProps.form.valid) {
+    //   if (this.props.disableSave) this.props.disableSave(false); 
+    // } else {
+    //   if (this.props.disableSave) this.props.disableSave(true);
+    // }
 
-            if (!props.data[ uiSchema.items[objKey].dependsOn[i] ]) {
-              showUiElement = false;
-              break;
-            }
+    return true;
+  }
 
-          }
+  handleOnBlur(e, formKey, value) {
+    this.props.formActions.blurField({
+      formId: this.props.formId,
+      field: formKey,
+      value,
+      schema: this.props.schema,
+      values: this.props.form && this.props.form.values,
+    });
+  }
 
-          if (showUiElement) {
-            return <Tmp key={newPath} onBlur={props && props.onBlur} onChange={props && props.onChange} data={props && props.data} path={newPath} value={get(props && props.data, newPath)} errors={props && props.errors} touched={props && props.touched} />;
-          } else {
-            return null;
-          }
-        }
-
-        return <Tmp key={newPath} onBlur={props && props.onBlur} onChange={props && props.onChange} data={props && props.data} path={newPath} value={get(props && props.data, newPath)} errors={props && props.errors} touched={props && props.touched} />;
-      });
-
-      return <div>{ content }</div>;
-    } else if (uiSchema.type === 'field') {
-      return 'field';
-    }
-
-    throw new Error('unsupported uiSchema type');
-
+  handleOnChange(e, formKey, value) {
+    this.props.formActions.changeField({
+      formId: this.props.formId,
+      field: formKey,
+      value,
+      schema: this.props.schema,
+      values: Object.assign({}, this.props.form && this.props.form.values),
+    });
   }
 
   render() {
-
-    return this.renderUiSchema();
-
+    const childrenWithProps = this.renderWrappedChildren(this.props.children)
+    
+    return <div>
+      { childrenWithProps }
+    </div>
   }
+
 }
 
-export default XevoForm;
+function mapStateToProps(state, ownProps) {
+
+  p('mapStateToProps');
+  p(state);
+  p(ownProps);
+
+  return {
+    form: state.form[ownProps.formId]
+  };
+
+}
+
+function mapDispatchToProps(dispatch) {
+
+  return {
+    formActions: {
+      blurField: dispatch.form.blurField,
+      changeField: dispatch.form.changeField,
+      setFields: dispatch.form.setFields,
+      resetForm: dispatch.form.reset,
+      validateForm: dispatch.form.validateForm
+    }
+  };
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(XevoForm);

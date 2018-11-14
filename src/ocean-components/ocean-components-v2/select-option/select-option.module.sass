@@ -1,0 +1,31 @@
+@import '../dropdown/dropdown.module.sass'
+@import '../text-input/text-input.module.sass'
+@import '../../../styles/ocean-components/_variables.sass'
+
+.animationInputTitle
+  &:valid
+      ~
+        .labelText
+          bottom: 2.5rem
+          font-size: 0.68rem
+          transition: 0.2s ease all
+
+.textInput
+  color: $black
+  &.animateBar
+    ~
+      .bar
+        &:before, &:after
+          width: 50%
+
+
+.errorMessage
+  color: $bright-red
+  font-size: 0.625rem
+  letter-spacing: 0
+  align-self: flex-start
+  position: relative
+  bottom: 0rem
+
+.textInputContainer
+  width: inherit

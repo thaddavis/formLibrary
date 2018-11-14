@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
-import XevoForm from '../../xevo-form';
+import JuiceForm from '../../juice-form';
 import EditEmergencyContactInfo from '../edit-emergency-contact/edit-emergency-contact.js';
 import emergencyContactsSchema from '../../../schemas/emergency-contacts-schema.json';
 import { prepareValues } from '../../../helpers/helpersForAjv';
@@ -22,7 +22,7 @@ const uiSchema = {
   },
 };
 
-class EditEmergencyContactsForm extends XevoForm {
+class EditEmergencyContactsForm extends JuiceForm {
   constructor(props) {
     super(props);
     
@@ -30,23 +30,10 @@ class EditEmergencyContactsForm extends XevoForm {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  async componentDidMount() {
-    p('componentDidMount');
+  componentDidMount() {
     const { data } = this.props;
-    if (this.props.form.values) {
-      
-    } else if (data) {
+    if (data) {
       this.setFormFields(data);
-      p('HERE');
-      try {
-        // const res = await this.props.userActions.fetchUserEmergencyContact(this.props.userId);
-        // this.setFormFields(res);
-      } catch (error) {
-        // logger.error('Something went wrong in edit-emergency-contact');
-        // logger.error(error);
-      }
-    } else {
-
     }
   }
 
@@ -56,34 +43,14 @@ class EditEmergencyContactsForm extends XevoForm {
       values: data,
       schema: emergencyContactsSchema
     });
-
-    // this.props.disableSave((this.props.form && !this.props.form.valid) || true);
-  }
-
-  handleOnChange(e, inputName, value) {
-    this.props.formActions.changeField({
-      formId: this.props.formId,
-      field: inputName,
-      value,
-      schema: this.props.schema,
-      values: Object.assign({}, this.props.form && this.props.form.values),
-    });
-  }
-
-  handleOnBlur(e, inputName, value) {
-    this.props.formActions.blurField({
-      formId: this.props.formId,
-      field: inputName,
-      value,
-      schema: this.props.schema,
-      values: this.props.form && this.props.form.values,
-    });
   }
 
   handleSubmit(event) {
     alert('Submitted: ' + JSON.stringify(this.props.form.values));
-    this.props.formActions.resetForm({formId: this.props.formId});
-    this.props.history.goBack();
+    this.props.formActions.resetForm({
+      formId: this.props.formId,
+      values: this.props.form && this.props.form.values,
+    });
     event.preventDefault();
   }
 
@@ -138,7 +105,9 @@ function mapStateToProps(state) {
   return {
     data: [{
       id: '1',
-      name: 'one'
+      name: 'one',
+      tennis: true,
+      soccer: true
     }],
     formId: 'editEmergencyContacts',
     schema: emergencyContactsSchema, 
@@ -153,7 +122,7 @@ function mapDispatchToProps(dispatch) {
       changeField: dispatch.form.changeField,
       setFields: dispatch.form.setFields,
       resetForm: dispatch.form.reset,
-      validateForm: dispatch.form.validateForm,
+      validateForm: dispatch.form.validateForm
     }
   };
 }

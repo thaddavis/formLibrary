@@ -1,0 +1,88 @@
+// @import 'variables'
+@import '../../../styles/ocean-components/_variables.sass'
+//files classname are being used in other componets
+
+.container
+  display: flex
+  flex-direction: column
+  position: relative
+  width: 100%
+  align-self: center
+
+.control
+  position: relative
+  width: 100%
+  height: fit-content
+  display: flex
+  align-items: center
+  align-self: center
+
+.options
+  position: absolute
+  top: 3.125rem
+  width: inherit
+  max-height: 18.75rem
+  overflow: hidden
+  overflow-y: scroll
+  align-self: center
+  display: flex
+  flex-direction: column
+  list-style-type: none
+  box-sizing: border-box
+  border: 0.0625rem solid $mercury
+  border-radius: 0 0 0.2rem 0.2rem
+  box-shadow: 0 0.125rem 0.625rem 0 $black-transparent-01
+  background-color: #fff
+  z-index: 1
+  margin: 0
+  padding: 0
+
+.item
+  display: flex
+  align-items: center
+  padding: 1.56rem 0 1.56rem 0
+  padding-left: 1.56rem
+  text-align: start
+  cursor: pointer
+  box-sizing: border-box
+  border-bottom: 0.0625rem solid $mercury
+  font-size: 1rem
+  &:hover
+    background-color: $black-transparent-01
+
+.active
+  @extend .item
+  border: 1px solid $blue-inactive
+    
+.labelText
+  position: absolute
+  display: inherit
+  color: $black-transparent
+  font-size: 0.93rem
+  transition: all 0.5s
+  &.animateUp
+    bottom: 1.5rem
+    font-size: 0.68rem
+    transition: all 0.5s
+  &.animateDown
+    bottom: 0
+    font-size: 0.93rem
+    transition: all 0.5s
+
+.icon
+  right: 0
+  top: 1rem
+  position: absolute
+
+.itemNotFound
+  display: flex
+  align-items: center
+  padding: 1.56rem 0 1.56rem 0
+  padding-left: 1.56rem
+  text-align: start
+  cursor: pointer
+  box-sizing: border-box
+  border-bottom: 0.0625rem solid $mercury
+  font-size: 1rem
+  background-color: $black-transparent-01
+  color: $black-transparent

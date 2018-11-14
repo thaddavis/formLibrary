@@ -18,6 +18,7 @@ export default function instantiateAjv() {
     ],
     allErrors: true,
     jsonPointers: true,
+    removeAdditional: true
   });
   require('ajv-errors')(ajv);
 

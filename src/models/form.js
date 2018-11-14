@@ -6,6 +6,8 @@ import {
   buildTouchedObjectWithEveryValueSetToTrue,
   groupErrors,
   prepareValues,
+  resetValues,
+  deleteAdditionalPropertiesFromInitializedValues
 } from '../helpers/helpersForAjv';
 
 import merge from 'deepmerge'
@@ -46,9 +48,9 @@ export default {
             ...state,
             [payload.formId]: {
               valid: false,
-              values: undefined,
-              touched: undefined,
-              errors: undefined
+              values: payload.values,
+              touched: {},
+              errors: {}
             }
           }
         },
@@ -88,7 +90,7 @@ export default {
             ...state,
             [payload.formId]: {
               ...state[payload.formId],
-              touched: merge(state[payload.formId].touched || {}, payload.touched),
+              touched: merge((state[payload.formId] && state[payload.formId].touched) || {}, payload.touched),
               errors: payload.errors
             }
           }
@@ -108,8 +110,18 @@ export default {
     },
     effects: (dispatch) => ({
         async reset(payload, rootState) {
+
+          p('******* reset *******');
+          
+          let resetValuesRootField;
+          if ( Object.prototype.toString.call(payload.values) === '[object Array]') { resetValuesRootField = "0"; } 
+          else { resetValuesRootField = ""; }
+
+          payload.values = resetValues(payload.values, resetValuesRootField);
+
           dispatch.form.resetForm(payload);
           return Promise.resolve();
+
         },
         async validateForm(payload, rootState) {
           performValidationAndGroupErrors(payload);
@@ -120,6 +132,16 @@ export default {
           dispatch.form.setValidationState(payload)
           return Promise.resolve();
         },
+        // example payload for changeField
+        // properties of payload will be manipulated in place
+        // then will be reduced by reducer
+        // {
+        //   formId
+        //   field
+        //   value
+        //   schema
+        //   values
+        // }
         async changeField(payload, rootState) {
           p('changeField')
           payload.touched = payload.touched || {};
@@ -129,6 +151,16 @@ export default {
           dispatch.form.setStateAfterChangeField(payload)
           return Promise.resolve();
         },
+        // example payload for blurField
+        // properties of payload will be manipulated in place
+        // then will be reduced by reducer
+        // {
+        //   formId
+        //   field
+        //   value
+        //   schema
+        //   values
+        // }
         async blurField(payload, rootState) {
           payload.touched = payload.touched || {};
           assign(payload.touched, payload.field, true);
@@ -148,6 +180,16 @@ export default {
           // generateErrorsObjectForForm(payload);
           // dispatch.form.setStateAfterRemoveKey(payload)
           
+          return Promise.resolve();
+        },
+        async deleteAdditionalProperties(payload, rootState) {
+
+          p('!!! deleteAdditionalProperties !!!');
+          p(payload.values);
+          p(payload.errors);
+
+          payload.values = deleteAdditionalPropertiesFromInitializedValues(payload);
+
           return Promise.resolve();
         }
     })

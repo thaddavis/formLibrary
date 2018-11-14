@@ -3,11 +3,11 @@ import React from 'react';
 import get from 'lodash/get';
 import classnames from 'classnames';
 
-import CSS from './TextInput.module.sass';
+import CSS from './checkbox.module.sass';
 
 const p = console.log;
 
-class TextInput extends React.Component {
+class CheckboxInput extends React.Component {
   constructor(props) {
     super(props);
     
@@ -22,28 +22,26 @@ class TextInput extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
+
     // if (nextProps.touched && get(nextProps.touched, nextProps.path) && nextProps.data) {
-    //   return {
-    //     value: get(nextProps.data, nextProps.path) || ''
-    //   }
+      // return {
+      //   value: get(nextProps.data, nextProps.path)
+      // }
     // }
 
     return {}
-  }
-
-  componentWillUnmount() {
-    p('TextInput --- componentWillUnmount')
+    
   }
 
   handleChange(event) {
-    const inputValue = event.currentTarget.value;
-    this.setState({value: event.target.value});
+    const inputValue = event.target.checked === true ? true : false;
+    this.setState({value: inputValue});
     this.props.onChange(event, this.props.path, inputValue);
   }
 
   handleBlur(event) {
     this.setState({ focused: false });
-    const inputValue = event.currentTarget.value;
+    const inputValue = event.target.checked === true ? true : false;
     this.props.onBlur(event, this.props.path, inputValue);
   }
 
@@ -59,22 +57,24 @@ class TextInput extends React.Component {
     );
 
     const containerClass = classnames(
-      { [CSS.textInputContainer]: this.state.focused || this.state.value },
-      { [CSS.textInputContainerIsNotFocusedOrDoesNotHaveValues]: !this.state.focused && !this.state.value }
+      { [CSS.checkboxInputContainer]: this.state.focused || this.state.value },
+      { [CSS.checkboxInputContainerIsNotFocusedOrDoesNotHaveValues]: !this.state.focused && !this.state.value }
     );
 
     const inputClass = classnames(
-      CSS.textInput,
+      CSS.checkboxInput,
       { [CSS.error]: get(this.props.errors, this.props.path) }
     );
-    
+  
     return (
-      <div 
+      <div
         className={containerClass}
       >
-        <input value={this.state.value}
-          onChange={this.handleChange}
-          onBlur={this.handleBlur}
+        <input 
+          type="checkbox"
+          checked={!!this.state.value}
+          onBlur={this.handleBlur} 
+          onChange={this.handleChange} 
           onFocus={this.handleFocus}
           className={inputClass}
           ref={(ref) => this.inputRef = ref}
@@ -112,6 +112,7 @@ class TextInput extends React.Component {
       <div />
     );
   }
+  
 }
 
-export default TextInput;
+export default CheckboxInput;

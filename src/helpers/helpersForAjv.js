@@ -16,6 +16,7 @@ export function isNormalInteger(str) {
 
 export function prepareValues(values, field) {
   
+  // Test the root of the object --- to see if it is an array or object
   var finalVar = isNormalInteger(field.split(".")[0]) ? [] : {};
   
   function recurse(val, path = '') {
@@ -25,6 +26,46 @@ export function prepareValues(values, field) {
       Object.prototype.toString.call(val) !== '[object Object]'
     ) {
       _.set(finalVar, path, val);
+    } else if (isNormalInteger(Object.keys(val)[0])) {
+      for (let i of Object.keys(val)) {
+        recurse(
+          val[i],
+          path === '' ? (path + i) : (path + '.' + i)
+        )
+      }
+    } else {
+      if (Object.keys(val).length > 0) {
+        for (let j of Object.keys(val)) {
+          recurse(
+            val[j],
+            path === '' ? (path + j) : (path + '.' + j)
+          )
+        }  
+      } else {
+        _.set(finalVar, path, {});
+      }
+    }
+
+  }
+
+  recurse(values);
+  
+  return finalVar;
+
+}
+
+export function resetValues(values, field) {
+  
+  // Test the root of the object --- to see if it is an array or object
+  var finalVar = isNormalInteger(field.split(".")[0]) ? [] : {};
+  
+  function recurse(val, path = '') {
+    
+    if (
+      Object.prototype.toString.call(val) !== '[object Array]' &&
+      Object.prototype.toString.call(val) !== '[object Object]'
+    ) {
+      _.set(finalVar, path, undefined);
     } else if (isNormalInteger(Object.keys(val)[0])) {
       for (let i of Object.keys(val)) {
         recurse(
@@ -87,7 +128,6 @@ export function buildTouchedObjectWithEveryValueSetToTrue(values) {
 }
 
 export function groupErrors(errors) {
-  p('groupErrors');
   var errorsObject = {};
   for (let e of Object.keys(errors)) {
     // debugger;
@@ -130,4 +170,11 @@ export function groupErrors(errors) {
   }
 
   return errorsObject;
+}
+
+export function deleteAdditionalPropertiesFromInitializedValues(payload) {
+
+  p('deleteAdditionalPropertiesFromInitializedValues');
+  p(payload);
+
 }

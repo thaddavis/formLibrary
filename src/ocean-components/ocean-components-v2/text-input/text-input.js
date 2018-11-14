@@ -3,7 +3,7 @@ import React from 'react';
 import get from 'lodash/get';
 import classnames from 'classnames';
 
-import CSS from './TextInput.module.sass';
+import CSS from './text-input.module.sass';
 
 const p = console.log;
 
@@ -23,28 +23,24 @@ class TextInput extends React.Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     // if (nextProps.touched && get(nextProps.touched, nextProps.path) && nextProps.data) {
-    //   return {
-    //     value: get(nextProps.data, nextProps.path) || ''
-    //   }
+      // return {
+      //   value: get(nextProps.data, nextProps.formKey) || ''
+      // }
     // }
 
     return {}
   }
 
-  componentWillUnmount() {
-    p('TextInput --- componentWillUnmount')
-  }
-
   handleChange(event) {
     const inputValue = event.currentTarget.value;
     this.setState({value: event.target.value});
-    this.props.onChange(event, this.props.path, inputValue);
+    this.props.onChange(event, this.props.formKey, inputValue);
   }
 
   handleBlur(event) {
     this.setState({ focused: false });
     const inputValue = event.currentTarget.value;
-    this.props.onBlur(event, this.props.path, inputValue);
+    this.props.onBlur(event, this.props.formKey, inputValue);
   }
 
   handleFocus(event) {
@@ -65,7 +61,7 @@ class TextInput extends React.Component {
 
     const inputClass = classnames(
       CSS.textInput,
-      { [CSS.error]: get(this.props.errors, this.props.path) }
+      { [CSS.error]: get(this.props.errors, this.props.formKey) }
     );
     
     return (
@@ -84,7 +80,7 @@ class TextInput extends React.Component {
           onFocus={this.handleFocus}
           onClick={this.handleFocus}
         >
-          {this.props.path}
+          {this.props.formKey}
         </label>
         <div>
           {this.error()}
@@ -95,16 +91,20 @@ class TextInput extends React.Component {
   }
 
   error() {
-    let errors = get(this.props.errors, this.props.path);
+    let errors = get(this.props.errors, this.props.formKey);
     
-    if (errors) {
+    if (errors && errors[0]) {
       return (
-        errors.map((e, index) => (
-          <div key={index} className={classnames(CSS.errorMessage)}>
-            { e.code }
-            <br />
-          </div>
-        ))
+        <div className={classnames(CSS.errorMessage)}>
+          { errors[0].code }
+          <br />
+        </div>
+        // errors.map((e, index) => (
+        //   <div key={index} className={classnames(CSS.errorMessage)}>
+        //     { e.code }
+        //     <br />
+        //   </div>
+        // ))
       );
     }
 

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import FormHeader from '../sharedFormComponents/form-header/form-header.js';
 import FormFooter from '../sharedFormComponents/form-footer/form-footer.js';
 
-import XevoForm from '../../xevo-form';
+import JuiceForm from '../../juice-form';
 
 import { TextInput } from '../../../ocean-components/better-components'
 import Essay from '../../../schemas/essay.json';
@@ -29,7 +29,7 @@ const uiSchema = {
   },
 };
 
-class EssayForm extends XevoForm {
+class EssayForm extends JuiceForm {
   constructor(props) {
     super(props);
     
@@ -37,29 +37,16 @@ class EssayForm extends XevoForm {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleOnChange(e, inputName, value) {
-    this.props.formActions.changeField({
-      formId: this.props.formId,
-      field: inputName,
-      value,
-      schema: this.props.schema,
-      values: Object.assign({}, this.props.form && this.props.form.values),
-    });
-  }
-
-  handleOnBlur(e, inputName, value) {
-    this.props.formActions.blurField({
-      formId: this.props.formId,
-      field: inputName,
-      value,
-      schema: this.props.schema,
-      values: this.props.form && this.props.form.values,
-    });
+  componentWillUnmount() {
+    p('Essay Form --- componentWillUnmount')
   }
 
   handleSubmit(event) {
     alert('Submitted: ' + JSON.stringify(this.props.form.values));
-
+    this.props.formActions.resetForm({
+      formId: this.props.formId,
+      values: this.props.form && this.props.form.values,
+    });
     event.preventDefault();
   }
 
@@ -83,8 +70,7 @@ class EssayForm extends XevoForm {
                 errors: this.props.form.errors,
                 touched: this.props.form.touched,
               })
-            }
-            
+            } 
             <FormFooter
               loading={false}
               onCancel={(evt) => {
@@ -131,6 +117,7 @@ function mapDispatchToProps(dispatch) {
       changeField: dispatch.form.changeField,
       setFields: dispatch.form.setFields,
       validateForm: dispatch.form.validateForm,
+      resetForm: dispatch.form.reset
     }
   };
 }

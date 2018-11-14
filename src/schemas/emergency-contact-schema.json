@@ -13,7 +13,8 @@
     },
     "dayPhone": {
       "type": "string",
-      "minLength": 1,
+      "minLength": 5,
+      "maxLength": 15,
       "isNotEmpty": true
     },
     "email": {

@@ -14,8 +14,6 @@ import { prepareValues } from '../../../helpers/helpersForAjv';
 
 import CSS from '../sharedFormStyles/formBody.module.sass';
 
-const p = console.log;
-
 const uiSchema = {
   type: 'object',
   items: {

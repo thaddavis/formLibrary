@@ -36,7 +36,8 @@ class EditEmergencyContactInfo extends React.Component {
     // this.setRelationship = this.setRelationship.bind(this);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+
     const { emergencyContacts } = this.props;
     if (emergencyContacts && emergencyContacts.length) {
       this.setEmergencyContacts(emergencyContacts);
@@ -50,7 +51,7 @@ class EditEmergencyContactInfo extends React.Component {
       }
     }
 
-    // this.props.disableSave(!this.isFormValid());
+    if (this.props.form) this.disableSaveButtonInParentComponent(this.props.form.valid);
   }
 
   async componentDidUpdate(prevProps) {
@@ -69,46 +70,18 @@ class EditEmergencyContactInfo extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.form && nextProps.form.valid) {
-      if (this.props.disableSave) this.props.disableSave(false); 
-    } else {
-      if (this.props.disableSave) this.props.disableSave(true);
-    }
+    if (nextProps.form) this.disableSaveButtonInParentComponent(nextProps.form.valid);
 
     return true;
   }
 
-  // setEmergencyContacts(emergencyContacts) {
-  //   const {
-  //     id,
-  //     name,
-  //     dayPhone,
-  //     relationship: relationshipValue,
-  //     address,
-  //   } = this.prePopulateFields(emergencyContacts);
-  //   // const currentRelationship = getRelationshipByValue(relationshipValue);
-  //   const relationshipDisplay = '';
-
-  //   this.setState({
-  //     id,
-  //     name,
-  //     dayPhone,
-  //     relationship: {
-  //       value: relationshipValue,
-  //       display: relationshipDisplay,
-  //     },
-  //     address: { ...this.state.address, ...address },
-  //   }, this.enableSaveButton);
-  // }
-
-  // setRelationship(e, inputName, value) {
-  //   this.setState({
-  //     relationship: {
-  //       value: value.value,
-  //       display: value.display,
-  //     },
-  //   });
-  // }
+  disableSaveButtonInParentComponent(isFormValid) {
+    if (isFormValid) {
+      if (this.props.disableSave) this.props.disableSave(false); 
+    } else {
+      if (this.props.disableSave) this.props.disableSave(true);
+    }
+  }
 
   async saveButtonClicked() {
     try {
@@ -126,63 +99,6 @@ class EditEmergencyContactInfo extends React.Component {
     // this.props.history.push(buildRoutes('profile_information'));
   }
 
-  // handleInput(e, inputName, value) {
-  //   if (inputName === 'email') {
-  //     this.setState({
-  //       address: {
-  //         ...this.state.address,
-  //         [inputName]: value,
-  //       },
-  //     }, this.enableSaveButton);
-  //   } else {
-  //     this.setState({ [inputName]: value }, this.enableSaveButton);
-  //   }
-  // }
-
-  // handleBlur(e, inputName, value) {
-  //   if (inputName === 'dayPhone') {
-  //     this.setState({ [inputName]: value }, this.enableSaveButton);
-  //   }
-  //   this.isFormValid();
-  // }
-
-  // enableSaveButton() {
-  //   this.props.disableSave(!this.isFormValid());
-  // }
-
-  // isFormValid() {
-  //   const name = get(this.state, 'name', '');
-  //   const dayPhone = get(this.state, 'dayPhone', '');
-  //   const relationship = get(this.state, 'relationship.value', '');
-  //   const address = get(this.state, 'address.email', '');
-
-  //   return !isEmpty(name) &&
-  //     !isEmpty(dayPhone) &&
-  //     !isEmpty(relationship) &&
-  //     !isEmpty(address) 
-  //     // &&
-  //     // Helpers.isEmailValid(address) &&
-  //     // Helpers.isPhoneNumberValid(dayPhone);
-  // }
-
-  // showWarningIfFieldIsEmpty(field, message) {
-  //   return isEmpty(field) ? message : '';
-  // }
-
-  // prePopulateFields(emergencyContacts = []) {
-  //   const emergencyContact = isEmpty(emergencyContacts) ? {} : emergencyContacts[0];
-
-  //   return {
-  //     id: get(emergencyContact, 'id', ''),
-  //     name: get(emergencyContact, 'name', ''),
-  //     dayPhone: get(emergencyContact, 'dayPhone', ''),
-  //     relationship: get(emergencyContact, 'relationship', ''),
-  //     address: {
-  //       email: get(emergencyContact, 'address.email', ''),
-  //     },
-  //   };
-  // }
-
   renderFormTitle(title, required = true) {
     return (
       <div className={CSS.formTitle}>
@@ -193,8 +109,7 @@ class EditEmergencyContactInfo extends React.Component {
   }
 
   render() {
-    // const { name, dayPhone, address, relationship } = this.state;
-
+    
     return (
       <XevoForm
         formId="emergencyContactsJuiceForm"
@@ -204,17 +119,31 @@ class EditEmergencyContactInfo extends React.Component {
           {this.renderFormTitle('emergency_contact', false)}
 
           <div>
-            <TextInput formKey="0.name"></TextInput>
+            <TextInput 
+              formKey="0.name"
+              label="Name"
+              id="0.name"
+            ></TextInput>
           </div>
           <div>
-            <TextMaskPhoneInput formKey="0.dayPhone"></TextMaskPhoneInput>
+            <TextMaskPhoneInput 
+              formKey="0.dayPhone"
+              label="Phone"
+              id="0.dayPhone"
+            ></TextMaskPhoneInput>
           </div>
           <div>
-            <TextInput formKey="0.email"></TextInput>
+            <TextInput 
+              formKey="0.email"
+              label="Email"
+              id="0.email"
+            ></TextInput>
           </div>
           <div>
             <SelectOption formKey="0.relationship"
               options={relationshipOptions()}
+              label="Relationship"
+              id="0.relationship"
             ></SelectOption>
           </div>
 
@@ -257,6 +186,7 @@ class EditEmergencyContactInfo extends React.Component {
         </div>
       </XevoForm>
     );
+
   }
 }
 
@@ -310,7 +240,7 @@ function mapStateToProps(state) {
     appIsReady: true,
     userId: '1',
     // emergencyContacts: selectedUser.emergencyContacts,
-    // form: state.form.emergencyContactsJuiceForm
+    form: state.form.emergencyContactsJuiceForm
   };
 }
 

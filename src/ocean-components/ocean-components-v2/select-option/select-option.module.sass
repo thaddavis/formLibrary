@@ -1,5 +1,5 @@
 @import '../dropdown/dropdown.module.sass'
-@import '../text-input/text-input.module.sass'
+// @import '../text-input/text-input.module.sass'
 @import '../../../styles/ocean-components/_variables.sass'
 
 .animationInputTitle
@@ -25,7 +25,137 @@
   letter-spacing: 0
   align-self: flex-start
   position: relative
-  bottom: 0rem
+  bottom: 0.5rem
+
+.inputContainer
+  width: inherit
+
+//--------------------
 
 .textInputContainer
-  width: inherit
+  height: 3.8rem
+  width: 100%
+  align-self: center
+  margin-top: 0.5rem
+  .textInput
+    height: 1.5rem
+    width: 100%
+    border: 0
+    border-bottom: 0.0625rem solid $grey
+    align-self: center
+    font-size: 0.93rem
+    padding: 0  
+    ~
+      .labelText
+        bottom: 2.5rem
+        font-size: 0.687rem
+        
+        transition: 0.2s ease all
+    &.error
+      border-bottom: 0.125rem solid $bright-red
+      &:valid
+        ~
+          .labelText
+            bottom: 2.5rem
+            font-size: 0.687rem
+            transition: 0.2s ease all
+
+.inputContainer
+  height: 3.8rem
+  width: 100%
+  align-self: center
+  margin-top: 0.5rem
+  .textInput
+    height: 1.5rem
+    width: 100%
+    border: 0
+    border-bottom: 0.0625rem solid $grey
+    align-self: center
+    font-size: 0.93rem
+    padding: 0  
+
+.textInputContainerIsNotFocusedOrDoesNotHaveValues
+  height: 3.8rem
+  width: 100%
+  align-self: center
+  margin-top: 0.5rem
+  ~
+      .labelText
+        bottom: 2.5rem
+        font-size: 0.687rem
+        transition: 0.2s ease all
+            
+.labelText
+  position: relative
+  display: inherit
+  color: rgba(0,0,0,0.5)
+  font-size: 0.93rem
+  transition: 0.2s ease all
+  bottom: 1.25rem
+
+.errorMessage
+  color: $bright-red
+  font-size: 0.625rem
+  letter-spacing: 0
+  align-self: flex-start
+  position: relative
+  bottom: 0.7rem
+  // margin-top: .4rem
+
+.textInput
+  // padding: 0.625rem 0.625rem 0.625rem 0.31rem
+  display: block
+  width: 100%
+  border: none
+  border-bottom: 0.0625rem solid $grey
+  &:focus
+    outline: none
+
+.label
+  color: $grey
+  font-size: 1.125rem
+  font-weight: normal
+  position: absolute
+  pointer-events: none
+  left: 0.31rem
+  top: 0.625rem
+  transition: 0.2s ease all
+  -moz-transition: 0.2s ease all
+  -webkit-transition: 0.2s ease all
+
+.textInput
+  &:focus ~ .label, &.true ~ .label
+    top: -1.25rem
+    font-size: 0.875rem
+    color: $dark-ocean
+
+.bar
+  position: relative
+  display: block
+  width: 100%
+
+  &:before, &:after
+    content: ''
+    height: 0.125rem
+    width: 0
+    bottom: 0
+    position: absolute
+    background: $dark-ocean
+    transition: 0.2s ease all
+    -moz-transition: 0.2s ease all
+    -webkit-transition: 0.2s ease all
+
+  &:before
+    left: 50%
+
+  &:after
+    right: 50%
+
+.textInput:focus ~ .bar
+  &:before, &:after
+    width: 50%
+
+.elevateText
+  bottom: 2.5rem
+  font-size: 0.687rem
+  transition: 0.2s ease all

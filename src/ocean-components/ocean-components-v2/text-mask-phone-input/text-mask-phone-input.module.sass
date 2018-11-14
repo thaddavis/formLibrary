@@ -1,16 +1,11 @@
-// @import 'src/styles/mixins'
-// @import 'variables'
-// files classname are being used in other componets
 @import '../../../styles/ocean-components/mixins'
 @import '../../../styles/ocean-components/variables'
 
 .textInputContainer
-  height: 3.5rem
+  height: 3.8rem
   width: 100%
   align-self: center
   margin-top: 0.5rem
-  &.noHeight
-    height: auto
   .textInput
     height: 1.5rem
     width: 100%
@@ -18,13 +13,12 @@
     border-bottom: 0.0625rem solid $grey
     align-self: center
     font-size: 0.93rem
-    padding: 0
-    &:valid
-      ~
-        .labelText
-          bottom: 2.5rem
-          font-size: 0.68rem
-          transition: 0.2s ease all
+    padding: 0  
+    ~
+      .labelText
+        bottom: 2.5rem
+        font-size: 0.687rem
+        transition: 0.2s ease all
     &.error
       border-bottom: 0.125rem solid $bright-red
       &:valid
@@ -33,15 +27,13 @@
             bottom: 2.5rem
             font-size: 0.687rem
             transition: 0.2s ease all
-    &.warning
-      border-bottom: 0.125rem solid $or-orange
-      &:valid
-        ~
-          .labelText
-            bottom: 2.5rem
-            font-size: 0.687rem
-            transition: 0.2s ease all
 
+.textInputContainerIsNotFocusedOrDoesNotHaveValues
+  height: 3.8rem
+  width: 100%
+  align-self: center
+  margin-top: 0.5rem  
+            
 .labelText
   position: relative
   display: inherit
@@ -56,20 +48,11 @@
   letter-spacing: 0
   align-self: flex-start
   position: relative
-  bottom: 0.3rem
-  margin-top: .4rem
-
-.warnMessage
-  color: $or-orange
-  font-size: 0.625rem
-  letter-spacing: 0
-  align-self: flex-start
-  position: relative
-  bottom: 0.9rem
-  margin-top: .4rem
+  bottom: 0.7rem
+  // margin-top: .4rem
 
 .textInput
-  padding: 0.625rem 0.625rem 0.625rem 0.31rem
+  // padding: 0.625rem 0.625rem 0.625rem 0.31rem
   display: block
   width: 100%
   border: none

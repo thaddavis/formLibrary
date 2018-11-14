@@ -22,12 +22,17 @@ class TextInput extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    // if (nextProps.touched && get(nextProps.touched, nextProps.path) && nextProps.data) {
-      // return {
-      //   value: get(nextProps.data, nextProps.formKey) || ''
-      // }
-    // }
-
+    if (prevState.focused === true) {
+      return {}
+    } else if (
+      nextProps.touched && 
+      get(nextProps.touched, nextProps.formKey) && 
+      nextProps.data
+    ) {
+      return {
+        value: get(nextProps.data, nextProps.formKey) || ''
+      }
+    }
     return {}
   }
 
@@ -46,6 +51,23 @@ class TextInput extends React.Component {
   handleFocus(event) {
     this.inputRef.focus();
     this.setState({ focused: true });  
+  }
+
+  error() {
+    let errors = get(this.props.errors, this.props.formKey);
+    
+    if (errors && errors[0]) {
+      return (
+        <div className={classnames(CSS.errorMessage)}>
+          { errors[0].code }
+          <br />
+        </div>
+      );
+    }
+
+    return (
+      <div />
+    );
   }
 
   render() {
@@ -74,13 +96,16 @@ class TextInput extends React.Component {
           onFocus={this.handleFocus}
           className={inputClass}
           ref={(ref) => this.inputRef = ref}
+          aria-label={this.props.label}
+          id={`text_input_${this.props.id}`}
         />
         <span className={CSS.bar}></span>
         <label className={labelClass}
+          htmlFor={`text_input_${this.props.id}`}
           onFocus={this.handleFocus}
           onClick={this.handleFocus}
         >
-          {this.props.formKey}
+          {this.props.label}
         </label>
         <div>
           {this.error()}
@@ -88,29 +113,6 @@ class TextInput extends React.Component {
       </div>
     );
     
-  }
-
-  error() {
-    let errors = get(this.props.errors, this.props.formKey);
-    
-    if (errors && errors[0]) {
-      return (
-        <div className={classnames(CSS.errorMessage)}>
-          { errors[0].code }
-          <br />
-        </div>
-        // errors.map((e, index) => (
-        //   <div key={index} className={classnames(CSS.errorMessage)}>
-        //     { e.code }
-        //     <br />
-        //   </div>
-        // ))
-      );
-    }
-
-    return (
-      <div />
-    );
   }
 }
 

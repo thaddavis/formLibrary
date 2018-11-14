@@ -78,6 +78,8 @@ class CheckboxInput extends React.Component {
           onFocus={this.handleFocus}
           className={inputClass}
           ref={(ref) => this.inputRef = ref}
+          aria-label={this.props.label}
+          id={`text_input_${this.props.id}`}
         />
         <span className={CSS.bar}></span>
         <label className={labelClass}
@@ -116,3 +118,5 @@ class CheckboxInput extends React.Component {
 }
 
 export default CheckboxInput;
+
+

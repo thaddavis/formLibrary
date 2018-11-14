@@ -6,6 +6,7 @@ import get from 'lodash/get';
 
 // Components
 import DropDownList from '../dropdown/dropdown-list';
+// import TextInput from '../text-input/text-input';
 
 // Styles
 import CSS from './select-option.module.sass';
@@ -36,17 +37,44 @@ export default class SelectOption extends React.Component {
     this.handleSelection = this.handleSelection.bind(this);
     this.handleOutsideClick = this.handleOutsideClick.bind(this);
     this.handleDocumentClick = this.handleDocumentClick.bind(this);
-    this.renderSelectionCont = this.renderSelectionCont.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.renderSelectionContent = this.renderSelectionContent.bind(this);
     this.onFocus = this.onFocus.bind(this);
     this.onBlur = this.onBlur.bind(this);
     this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value !== this.props.value && nextProps.value !== this.state.value) {
-      this.setState({ value: nextProps.value });
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.focused === true) {
+      return {}
+    } else if (
+      nextProps.touched && 
+      get(nextProps.touched, nextProps.formKey) && 
+      nextProps.data
+    ) {
+
+      let obj = nextProps.options.find(obj => obj.value === get(nextProps.data, nextProps.formKey));
+      let index = nextProps.options.findIndex(obj => obj.value === get(nextProps.data, nextProps.formKey));
+
+      if (obj && index) {
+        console.log(JSON.stringify({
+          navigationIndex: index,
+          navigationItem: obj,
+          item: obj,
+          value: obj.value
+        }));
+  
+        return {
+          navigationIndex: index,
+          navigationItem: obj,
+          item: obj,
+          value: obj.display
+        };
+      }
+    
     }
+
+    return {};
+
   }
 
   componentDidMount() {
@@ -121,6 +149,7 @@ export default class SelectOption extends React.Component {
   handleSelection(e, item) {
     this.setState({ value: item.display, item });
     this.props.onChange(e, this.props.formKey, item.value);
+    this.props.onBlur(e, this.props.formKey, this.state.item.value);
     this.disableDropDown();
   }
 
@@ -129,11 +158,10 @@ export default class SelectOption extends React.Component {
   }
 
   handleOutsideClick(e) {
-    this.props.onBlur(e, this.props.formKey, this.state.item.value);
     e.nativeEvent.stopImmediatePropagation();
   }
 
-  renderSelectionCont() {
+  renderSelectionContent() {
     if (!this.state.active) return;
 
     const { options } = this.props;
@@ -152,30 +180,7 @@ export default class SelectOption extends React.Component {
     );
   }
 
-  // error() {
-  //   const className = classnames({ [CSS.errorMessage]: this.state.error }, { [CSS.warnMessage]: this.props.showWarning });
-
-  //   if (this.props.showWarning) {
-  //     return (
-  //       <div className={className}>
-  //         {this.props.showWarning}
-  //       </div>
-  //     );
-  //   }
-
-  //   if (this.props.showErrorMessage && this.props.error && !this.state.active) {
-  //     return (
-  //       <div className={CSS.errorMessage}>
-  //         {this.props.error}
-  //       </div>
-  //     );
-  //   }
-  //   return null;
-  // }
-
   error() {
-    console.log('select-option   error()');
-
     let errors = get(this.props.errors, this.props.formKey);
     
     if (errors && errors[0]) {
@@ -184,22 +189,12 @@ export default class SelectOption extends React.Component {
           { errors[0].code }
           <br />
         </div>
-        // errors.map((e, index) => (
-        //   <div key={index} className={classnames(CSS.errorMessage)}>
-        //     { e.code }
-        //     <br />
-        //   </div>
-        // ))
       );
     }
 
     return (
       <div />
     );
-  }
-
-  handleKeyDown(e) {
-    e.preventDefault();
   }
 
   onFocus(e) {
@@ -210,33 +205,34 @@ export default class SelectOption extends React.Component {
   }
 
   onBlur(e) {
-    console.log('select-option   onBlur');
     if (!this.state.active) {
       return;
     }
     this.setState({ active: false, focused: false });
-    
     this.props.onBlur(e, this.props.formKey, this.state.item.value);
-
   }
 
   render() {
     const imgSrc = this.state.active ? up_arrow : down_arrow;
-    const containerClassName = classnames(CSS.container, { [this.props.containerClassName]: !!this.props.containerClassName });
+    const containerClassName = classnames(
+      CSS.container, 
+      { [CSS.textInputContainer]: this.state.focused || this.state.value },
+      { [CSS.textInputContainerIsNotFocusedOrDoesNotHaveValues]: !this.state.focused && !this.state.value }
+    );
+    
     const toggleList = this.state.active && !this.state.focused ? this.disableDropDown : this.enableDropDown;
     const inputAnimation = classnames(
       CSS.textInput,
       { [CSS.animationInputTitle]: this.state.active },
       { [CSS.error]: (this.props.showErrorMessage && !!this.props.error && !this.state.active) },
-      { [CSS.animateBar]: this.state.active },
-      { [CSS.warning]: this.props.showWarning },
+      { [CSS.animateBar]: this.state.active }
     );
 
     return (
       <div className={containerClassName} onClick={this.handleOutsideClick} id={`select_option_container_${this.props.id}`}>
         <div className={CSS.control}>
           <div
-            className={CSS.textInputContainer}
+            className={CSS.inputContainer}
             onClick={toggleList}
             id={`select_option_textInput_container_${this.props.id}`}
           >
@@ -249,9 +245,15 @@ export default class SelectOption extends React.Component {
               onBlur={this.onBlur}
               onKeyDown={this.handleOnKeyDown}
               required="required"
+              readOnly
             />
             <span className={CSS.bar} />
-            <label className={CSS.labelText} htmlFor={`select_option_input_${this.props.id}`}>{this.props.label}</label>
+            <label 
+              className={CSS.labelText} 
+              htmlFor={`select_option_input_${this.props.id}`}
+              onFocus={this.onFocus}
+              onClick={this.onFocus}
+            >{this.props.label}</label>
             {this.error()}
           </div>
           <img
@@ -261,7 +263,7 @@ export default class SelectOption extends React.Component {
             src={imgSrc}
           />
         </div>
-        {this.renderSelectionCont()}
+        {this.renderSelectionContent()}
       </div>
     );
   }

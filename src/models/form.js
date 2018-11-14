@@ -1,8 +1,6 @@
-import axios from 'axios'
 import instanceOfAjv from '../helpers/instantiateAjv';
 import {
   assign, 
-  isNormalInteger, 
   buildTouchedObjectWithEveryValueSetToTrue,
   groupErrors,
   prepareValues,

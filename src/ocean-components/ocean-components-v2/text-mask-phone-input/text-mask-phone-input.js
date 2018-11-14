@@ -13,12 +13,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import get from 'lodash/get';
 import classnames from 'classnames';
 
-// Helpers
-import { isPhoneNumberValid } from '../helpers/string-helper';
-
-// Styles
 import CSS from './text-mask-phone-input.module.sass';
 
 class TextMaskPhoneInput extends React.Component {
@@ -26,21 +23,30 @@ class TextMaskPhoneInput extends React.Component {
     super(props);
 
     this.state = {
-      value: '',
-      error: '',
+      value: ''
     };
     this.inputRef = {};
-    this.focusField = this.focusField.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
+    this.onChange = this.onChange.bind(this);
     this.onBlur = this.onBlur.bind(this);
     this.onFocus = this.onFocus.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.focused === true) {
+      return {}
+    } else if (
+      nextProps.touched && 
+      get(nextProps.touched, nextProps.formKey) && 
+      nextProps.data
+    ) {
+      return {
+        value: get(nextProps.data, nextProps.formKey) || ''
+      }
+    }
+    return {}
   }
 
   componentDidMount() {
-    if (this.props.error) {
-      this.setState({ error: this.props.error });
-    }
     if (this.props.value && this.props.value !== this.state.value) {
       this.setState({
         value: this.props.value,
@@ -48,62 +54,12 @@ class TextMaskPhoneInput extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.error !== this.props.error) {
-      this.setState({ error: nextProps.error });
-    }
-
-    if (nextProps.value && nextProps.value !== this.state.value) {
-      this.setState({
-        value: this.transformValueToMaskValue(nextProps.value),
-      });
-    }
-  }
-
-  focusField() {
-    this.inputRef.focus();
-  }
-
-  onKeyDown(e) {
-    if (this.props.onKeyDown) {
-      this.props.onKeyDown(e);
-    }
-  }
-
-  handleInputChange(e, value = '') {
-    const inputValue = value || e.currentTarget.value;
-
-    const onlyNumbers = new RegExp(/^[0-9]*$/);
-    if (onlyNumbers.test(inputValue.replace(/-/g, ''))) {
-      this.setState({ value: this.transformValueToMaskValue(inputValue) });
-      return this.props.onChange(e, this.props.inputName, this.transformValueToMaskValue(inputValue));
-    }
-  }
-
-  transformValueToMaskValue(val) {
-    const newVal = val.replace(/-/g, '');
-
-    if (newVal) {
-      if (newVal && (newVal.length === 7 || newVal.length === 10)) {
-        const result = newVal.length === 7 ? `${newVal.slice(0, 3)}-${newVal.slice(3)}` :
-          `${newVal.slice(0, 3)}-${newVal.slice(3, 6)}-${newVal.slice(6)}`;
-
-        return result;
-      }
-
-      return newVal.replace('-', '');
-    }
-
-    return val;
-  }
-
   label() {
     if (!this.props.label) return;
-
     return (
       <label
         className={CSS.labelContainer}
-        htmlFor={`${this.state.id}-input`}
+        htmlFor={`text_input_${this.props.id}`}
         aria-label={this.props.label + (this.props.subText ? ` ${this.props.subText}` : '')}
         role="textbox"
       >
@@ -113,77 +69,71 @@ class TextMaskPhoneInput extends React.Component {
   }
 
   error() {
-    if ((!this.state.error && !this.props.showWarning) || this.state.focused) return <div />;
-
-    const className = classnames({ [CSS.errorMessage]: this.state.error }, { [CSS.warnMessage]: this.props.showWarning });
-    if (this.props.showWarning) {
+    let errors = get(this.props.errors, this.props.formKey);
+    if (errors && errors[0]) {
       return (
-        <div className={className}>
-          {this.props.showWarning}
+        <div className={classnames(CSS.errorMessage)}>
+          { errors[0].code }
+          <br />
         </div>
       );
     }
     return (
-      <div className={className}>
-        {this.state.error}
-      </div>
+      <div />
     );
   }
 
   onFocus(e) {
-    if (this.props.onFocus) {
-      this.props.onFocus(e);
-    }
-
-    this.setState({
-      value: this.state.value,
-      error: '',
-    });
-
     this.inputRef.focus();
     this.setState({ focused: true });
   }
 
-  async onBlur(e) {
+  onBlur(e) {
     this.setState({ focused: false });
+    const inputValue = e.currentTarget.value;
+    this.props.onBlur(e, this.props.formKey, inputValue);
+  }
 
-    await this.validateField();
-    if (!this.state.error) {
-      this.setState({
-        value: this.state.value,
-      });
-    }
-
-    if (this.props.onBlur) {
-      // this.props.onBlur(e, this.props.inputName, this.state.value);
+  onChange(e, value = '') {
+    const inputValue = value || e.currentTarget.value;
+    const onlyNumbers = new RegExp(/^[0-9]*$/);
+    if (onlyNumbers.test(inputValue.replace(/-/g, ''))) {
+      this.setState({ value: this.transformValueToMaskValue(inputValue) });
+      this.props.onChange(e, this.props.formKey, this.transformValueToMaskValue(inputValue));
     }
   }
 
-  validateField() {
-    if (this.state.value && this.state.value.length < 5) {
-      this.setState({ error: 'Your number is too short' });
-    } else if (this.state.value && this.state.value.length > 15) {
-      this.setState({ error: 'Your number is too long' });
-    } else if (this.state.value && !isPhoneNumberValid(this.state.value)) {
-      this.setState({ error: 'Your number is not valid' });
+  transformValueToMaskValue(val) {
+    const newVal = val.replace(/-/g, '');
+    if (newVal) {
+      if (newVal && (newVal.length === 7 || newVal.length === 10)) {
+        const result = newVal.length === 7 ? `${newVal.slice(0, 3)}-${newVal.slice(3)}` :
+          `${newVal.slice(0, 3)}-${newVal.slice(3, 6)}-${newVal.slice(6)}`;
+        return result;
+      }
+      return newVal.replace('-', '');
     }
+    return val;
   }
 
   render() {
     const containerClassName = classnames(
-      CSS.textInputContainer,
-      { [CSS.noHeight]: (!!this.state.value.length && this.props.validatePasswordInput) },
-      { [this.props.containerClassName]: !!this.props.containerClassName },
+      { [CSS.textInputContainer]: this.state.focused || this.state.value },
+      { [CSS.textInputContainerIsNotFocusedOrDoesNotHaveValues]: !this.state.focused && !this.state.value }
     );
+
+    const containerClass = classnames(
+      { [CSS.textInputContainer]: this.state.focused || this.state.value },
+      { [CSS.textInputContainerIsNotFocusedOrDoesNotHaveValues]: !this.state.focused && !this.state.value }
+    );
+
     const classname = classnames(
       CSS.textInput,
-      { [CSS.error]: this.state.error || this.props.showError },
-      { [CSS.warning]: this.props.showWarning },
+      { [CSS.error]: get(this.props.errors, this.props.formKey) },
     );
 
     const labelClass = classnames(
-      CSS.labelText,
-      { [CSS.elevateText]: !!this.state.value.length && this.props.disabled },
+      CSS.labelText
     );
 
     return (
@@ -192,7 +142,7 @@ class TextMaskPhoneInput extends React.Component {
         <input
           id={`text_input_${this.props.id}`}
           className={classname}
-          onChange={this.handleInputChange}
+          onChange={this.onChange}
           onBlur={this.onBlur}
           onFocus={this.onFocus}
           onKeyDown={this.onKeyDown}
@@ -209,8 +159,8 @@ class TextMaskPhoneInput extends React.Component {
         <span className={CSS.bar} />
         <label
           onFocus={this.onFocus}
+          onClick={this.onFocus}
           className={labelClass}
-          onClick={this.focusField}
           id={`text_input_label_${this.props.id}`}
         >
           {this.props.label}
@@ -243,7 +193,7 @@ TextMaskPhoneInput.propTypes = {
   containerClassName: PropTypes.string,
   id: PropTypes.string,
   value: PropTypes.string,
-  onInputChange: PropTypes.func,
+  onChange: PropTypes.func,
   onBlur: PropTypes.func,
   onKeyDown: PropTypes.func,
   inputName: PropTypes.string,

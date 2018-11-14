@@ -22,11 +22,18 @@ class TextInput extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    // if (nextProps.touched && get(nextProps.touched, nextProps.path) && nextProps.data) {
-    //   return {
-    //     value: get(nextProps.data, nextProps.path) || ''
-    //   }
-    // }
+    // debugger;
+
+    if (prevState.focused === true) {
+      return {}
+    } else if (
+      nextProps.touched && 
+      get(nextProps.touched, nextProps.path) && 
+      nextProps.data) {
+      return {
+        value: get(nextProps.data, nextProps.path) || ''
+      }
+    }
 
     return {}
   }

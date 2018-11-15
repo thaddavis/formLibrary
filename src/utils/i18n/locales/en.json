@@ -1,0 +1,20 @@
+{
+  "name": "Name",
+  "phone": "Phone",
+  "email": "Email",
+  "relationship": "Relationship",
+  "relationships_dependent": "Dependent",
+  "relationships_sibling": "Sibling",
+  "relationships_parent": "Parent",
+  "relationships_friend": "Friend",
+  "relationships_guardian": "Guardian",
+  "relationships_child": "Child",
+  "relationships_relative": "Relative",
+  "relationships_spouse_significant_other": "Significant Other",
+  "maxLength": "Your input cannot be longer than {{limit}} character(s)",
+  "minLength": "Your input cannot be shorter than {{limit}} character(s)",
+  "required": "Required",
+  "format": "Invalid {{format}} format",
+  "enum": "Invalid",
+  "isNotEmpty": "Required"
+}

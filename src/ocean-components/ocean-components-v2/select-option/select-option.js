@@ -15,6 +15,8 @@ import CSS from './select-option.module.sass';
 import down_arrow from '../../../styles/svg/arrow-down.svg';
 import up_arrow from '../../../styles/svg/arrow-up.svg';
 
+import i18n from '../../../utils/i18n/i18n';
+
 export default class SelectOption extends React.Component {
   constructor() {
     super();
@@ -44,6 +46,16 @@ export default class SelectOption extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
+    let obj = nextProps.options.find(obj => obj.value === get(nextProps.data, nextProps.formKey));
+    let index = nextProps.options.findIndex(obj => obj.value === get(nextProps.data, nextProps.formKey));
+    
+    console.log('select-option getDerivedStateFromProps');
+    console.log(obj);
+    console.log(index);
+    console.log('---------')
+    console.log(nextProps);
+    console.log(prevState);
+
     if (prevState.focused === true) {
       return {}
     } else if (
@@ -51,30 +63,26 @@ export default class SelectOption extends React.Component {
       get(nextProps.touched, nextProps.formKey) && 
       nextProps.data
     ) {
-
       let obj = nextProps.options.find(obj => obj.value === get(nextProps.data, nextProps.formKey));
       let index = nextProps.options.findIndex(obj => obj.value === get(nextProps.data, nextProps.formKey));
-
-      if (obj && index) {
-        console.log(JSON.stringify({
-          navigationIndex: index,
-          navigationItem: obj,
-          item: obj,
-          value: obj.value
-        }));
-  
+      
+      if (obj && index > -1) {
         return {
           navigationIndex: index,
           navigationItem: obj,
           item: obj,
           value: obj.display
         };
+      } else {
+        return {
+          navigationIndex: 0,
+          navigationItem: {},
+          item: {},
+          value: ""
+        };
       }
-    
     }
-
     return {};
-
   }
 
   componentDidMount() {
@@ -87,29 +95,30 @@ export default class SelectOption extends React.Component {
     const { keyCode } = event;
 
     switch (keyCode) {
-      case 38: {
+      case 38:
         if (this.state.navigationIndex > 0) {
           this.setState((state) => ({
             navigationIndex: state.navigationIndex - 1,
             navigationItem: this.props.options[state.navigationIndex - 1],
           }));
         }
-      }
         break;
 
-      case 40: {
+      case 40:
         if (this.state.navigationIndex < this.props.options.length - 1) {
           this.setState((state) => ({
             navigationIndex: state.navigationIndex + 1,
             navigationItem: this.props.options[state.navigationIndex + 1],
           }));
         }
-      }
         break;
 
-      case 13: {
-        this.handleSelection(event, this.state.navigationItem);
-      }
+      case 13:
+        this.setState((state) => ({
+          navigationIndex: state.navigationIndex,
+          navigationItem: this.props.options[state.navigationIndex],
+        }));
+        this.handleSelection(event, this.props.options[this.state.navigationIndex]);
         break;
 
       default:
@@ -118,7 +127,6 @@ export default class SelectOption extends React.Component {
 
   getAriaLabel() {
     const item = this.props.options[this.state.navigationIndex];
-
     return get(item, 'display', '');
   }
 
@@ -147,10 +155,12 @@ export default class SelectOption extends React.Component {
   }
 
   handleSelection(e, item) {
+    console.log('select-option handleSelection');
     this.setState({ value: item.display, item });
+    // this.props.onBlur(e, this.props.formKey, this.state.item.value);
+    this.onBlur(e);
     this.props.onChange(e, this.props.formKey, item.value);
-    this.props.onBlur(e, this.props.formKey, this.state.item.value);
-    this.disableDropDown();
+    // this.disableDropDown();
   }
 
   handleDocumentClick() {
@@ -186,7 +196,7 @@ export default class SelectOption extends React.Component {
     if (errors && errors[0]) {
       return (
         <div className={classnames(CSS.errorMessage)}>
-          { errors[0].code }
+          { i18n.t(errors[0].code, errors[0].params) }
           <br />
         </div>
       );
@@ -198,6 +208,7 @@ export default class SelectOption extends React.Component {
   }
 
   onFocus(e) {
+    console.log('select-option --- onFocus');
     if (this.state.active) {
       return;
     }
@@ -205,11 +216,13 @@ export default class SelectOption extends React.Component {
   }
 
   onBlur(e) {
+    console.log('select-option --- onBlur');
     if (!this.state.active) {
       return;
     }
     this.setState({ active: false, focused: false });
     this.props.onBlur(e, this.props.formKey, this.state.item.value);
+    // this.disableDropDown();
   }
 
   render() {
@@ -242,6 +255,7 @@ export default class SelectOption extends React.Component {
               id={`select_option_input_${this.props.id}`}
               value={this.state.value}
               onFocus={this.onFocus}
+              onClick={this.onFocus}
               onBlur={this.onBlur}
               onKeyDown={this.handleOnKeyDown}
               required="required"
@@ -261,6 +275,7 @@ export default class SelectOption extends React.Component {
             onClick={toggleList}
             id={`select_option_dropdown_icon_${this.props.id}`}
             src={imgSrc}
+            alt="dropdown"
           />
         </div>
         {this.renderSelectionContent()}
@@ -272,31 +287,26 @@ export default class SelectOption extends React.Component {
 SelectOption.propTypes = {
   label: PropTypes.string.isRequired,
   id: PropTypes.string,
-  onClick: PropTypes.func,
-  error: PropTypes.string,
-  showErrorMessage: PropTypes.bool,
-  showWarning: PropTypes.string,
+  containerClassName: PropTypes.string,
+  dropDownListClassName: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(PropTypes.shape({
     display: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   }).isRequired),
-  containerClassName: PropTypes.string,
-  label: PropTypes.string.isRequired,
-  inputName: PropTypes.string.isRequired,
-  dropDownListClassName: PropTypes.string.isRequired,
 };
 SelectOption.defaultProps = {
-  showErrorMessage: false,
-  showWarning: '',
-  error: 'Select an option from the dropdown.',
+  label: '',
+  id: '',
   containerClassName: '',
   dropDownListClassName: '',
-  inputName: '',
-  label: '',
   value: '',
-  id: '',
   options: [
     { display: 'No results Found', value: 'Default' },
   ],
+  onChange: PropTypes.func,
+  onBlur: PropTypes.func,
+  data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  errors: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  touched: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 };
 

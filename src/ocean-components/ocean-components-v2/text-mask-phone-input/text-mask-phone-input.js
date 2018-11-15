@@ -17,7 +17,7 @@ import get from 'lodash/get';
 import classnames from 'classnames';
 
 import CSS from './text-mask-phone-input.module.sass';
-
+import i18n from '../../../utils/i18n/i18n';
 class TextMaskPhoneInput extends React.Component {
   constructor(props) {
     super(props);
@@ -73,7 +73,7 @@ class TextMaskPhoneInput extends React.Component {
     if (errors && errors[0]) {
       return (
         <div className={classnames(CSS.errorMessage)}>
-          { errors[0].code }
+          { i18n.t(errors[0].code, errors[0].params) }
           <br />
         </div>
       );
@@ -122,11 +122,6 @@ class TextMaskPhoneInput extends React.Component {
       { [CSS.textInputContainerIsNotFocusedOrDoesNotHaveValues]: !this.state.focused && !this.state.value }
     );
 
-    const containerClass = classnames(
-      { [CSS.textInputContainer]: this.state.focused || this.state.value },
-      { [CSS.textInputContainerIsNotFocusedOrDoesNotHaveValues]: !this.state.focused && !this.state.value }
-    );
-
     const classname = classnames(
       CSS.textInput,
       { [CSS.error]: get(this.props.errors, this.props.formKey) },
@@ -145,14 +140,11 @@ class TextMaskPhoneInput extends React.Component {
           onChange={this.onChange}
           onBlur={this.onBlur}
           onFocus={this.onFocus}
-          onKeyDown={this.onKeyDown}
           onClick={this.onFocus}
           value={this.state.value}
           aria-label={this.props.label}
           type="text"
           ref={(ref) => this.inputRef = ref}
-          required="required"
-          disabled={this.props.disabled}
           autoComplete={this.props.autocomplete}
         />
 
@@ -176,37 +168,23 @@ TextMaskPhoneInput.defaultProps = {
   id: '',
   label: '',
   className: '',
-  type: 'text',
-  isValid: false,
-  validatePasswordInput: false,
   inputName: '',
-  showError: false,
   value: '',
   containerClassName: '',
-  showWarning: '',
-  disabled: false,
-  onKeyDown: Function.prototype,
-  autocomplete: '',
 };
 
 TextMaskPhoneInput.propTypes = {
   containerClassName: PropTypes.string,
   id: PropTypes.string,
   value: PropTypes.string,
-  onChange: PropTypes.func,
-  onBlur: PropTypes.func,
-  onKeyDown: PropTypes.func,
   inputName: PropTypes.string,
-  error: PropTypes.string,
-  type: PropTypes.string,
   label: PropTypes.string,
   className: PropTypes.string,
-  isValid: PropTypes.bool,
-  validatePasswordInput: PropTypes.bool,
-  showError: PropTypes.bool,
-  showWarning: PropTypes.string,
-  disabled: PropTypes.bool,
-  autocomplete: PropTypes.string,
+  onChange: PropTypes.func,
+  onBlur: PropTypes.func,
+  data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  errors: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  touched: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
 };
 
 export default TextMaskPhoneInput;

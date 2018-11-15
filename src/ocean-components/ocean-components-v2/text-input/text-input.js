@@ -1,11 +1,10 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import classnames from 'classnames';
 
 import CSS from './text-input.module.sass';
-
-const p = console.log;
+import i18n from '../../../utils/i18n/i18n';
 
 class TextInput extends React.Component {
   constructor(props) {
@@ -22,6 +21,7 @@ class TextInput extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
+    console.log('text-input getDerivedStateFromProps');
     if (prevState.focused === true) {
       return {}
     } else if (
@@ -59,7 +59,7 @@ class TextInput extends React.Component {
     if (errors && errors[0]) {
       return (
         <div className={classnames(CSS.errorMessage)}>
-          { errors[0].code }
+          { i18n.t(errors[0].code, errors[0].params) }
           <br />
         </div>
       );
@@ -115,5 +115,17 @@ class TextInput extends React.Component {
     
   }
 }
+
+TextInput.propTypes = {
+  id: PropTypes.string,
+  value: PropTypes.string,
+  inputName: PropTypes.string,
+  label: PropTypes.string,
+  onChange: PropTypes.func,
+  onBlur: PropTypes.func,
+  data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  errors: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  touched: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+};
 
 export default TextInput;

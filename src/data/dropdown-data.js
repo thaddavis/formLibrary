@@ -1,35 +1,37 @@
+import i18n from '../utils/i18n/i18n';
+
 export function relationshipOptions() {
     return [
       {
-        display: 'relationships_dependent',
+        display: i18n.t('relationships_dependent'),
         value: 'Dependent',
       },
       {
-        display: 'relationships_sibling',
+        display: i18n.t('relationships_sibling'),
         value: 'Sibling',
       },
       {
-        display: 'relationships_parent',
+        display: i18n.t('relationships_parent'),
         value: 'Parent',
       },
       {
-        display: 'relationships_friend',
+        display: i18n.t('relationships_friend'),
         value: 'Friend',
       },
       {
-        display: 'relationships_guardian',
+        display: i18n.t('relationships_guardian'),
         value: 'Guardian',
       },
       {
-        display: 'relationships_child',
+        display: i18n.t('relationships_child'),
         value: 'Child',
       },
       {
-        display: 'relationships_relative',
+        display: i18n.t('relationships_relative'),
         value: 'Relative',
       },
       {
-        display: 'relationships_spouse_significant_other',
+        display: i18n.t('relationships_spouse_significant_other'),
         value: 'Spouse_Significant_Other',
       },
     ];

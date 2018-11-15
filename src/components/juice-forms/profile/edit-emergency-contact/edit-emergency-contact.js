@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import isEmpty from 'lodash/isEmpty';
-import get from 'lodash/get';
+// import { bindActionCreators } from 'redux';
+// import isEmpty from 'lodash/isEmpty';
+// import get from 'lodash/get';
 // import logger from 'exm-logger';
 // import { SelectOption, TextInput, TextMaskPhoneInput, Helpers } from 'ocean-components';
 
@@ -14,7 +14,7 @@ import get from 'lodash/get';
 // import { getRelationshipByValue } from 'helpers/user-helper';
 // import buildRoutes from 'helpers/route-helper';
 
-// import i18n from 'utils/i18n/i18n';
+import i18n from '../../../../utils/i18n/i18n';
 
 import { relationshipOptions } from '../../../../data/dropdown-data';
 
@@ -25,7 +25,7 @@ import { TextInput, SelectOption, TextMaskPhoneInput } from '../../../../ocean-c
 import XevoForm from '../../../xevo-form';
 import emergencyContactsSchema from '../../../../schemas/emergency-contacts-schema.json';
 
-const p = console.log
+// const p = console.log
 
 class EditEmergencyContactInfo extends React.Component {
   constructor() {
@@ -70,6 +70,7 @@ class EditEmergencyContactInfo extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    console.log('edit-emergency-contact *** shouldComponentUpdate');
     if (nextProps.form) this.disableSaveButtonInParentComponent(nextProps.form.valid);
 
     return true;
@@ -85,10 +86,13 @@ class EditEmergencyContactInfo extends React.Component {
 
   async saveButtonClicked() {
     try {
-      // debugger;
       alert('Submitted: ' + JSON.stringify(this.props.form.values));
       // await this.props.userActions.saveEmergencyContact(data);
       // this.props.history.push(buildRoutes('profile_information'));
+      this.props.resetForm({
+        formId: 'emergencyContactsJuiceForm',
+        values: this.props.form && this.props.form.values,
+      });
     } catch (error) {
       // logger.error('Error happen when saving residency-info, Error:');
       // logger.error(error);
@@ -118,31 +122,33 @@ class EditEmergencyContactInfo extends React.Component {
         <div className={CSS.container}>
           {this.renderFormTitle('emergency_contact', false)}
 
+          {/* { i18n.t('maxLength', ) } */}
+
           <div>
             <TextInput 
               formKey="0.name"
-              label="Name"
+              label={i18n.t('name')}
               id="0.name"
             ></TextInput>
           </div>
           <div>
             <TextMaskPhoneInput 
               formKey="0.dayPhone"
-              label="Phone"
+              label={i18n.t('phone')}
               id="0.dayPhone"
             ></TextMaskPhoneInput>
           </div>
           <div>
             <TextInput 
               formKey="0.email"
-              label="Email"
+              label={i18n.t('email')}
               id="0.email"
             ></TextInput>
           </div>
           <div>
             <SelectOption formKey="0.relationship"
               options={relationshipOptions()}
-              label="Relationship"
+              label={i18n.t('relationship')}
               id="0.relationship"
             ></SelectOption>
           </div>
@@ -225,7 +231,9 @@ EditEmergencyContactInfo.propTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-  return {};
+  return {
+    resetForm: dispatch.form.reset
+  };
   // return {
   //   userActions: bindActionCreators(userActions, dispatch),
   // };

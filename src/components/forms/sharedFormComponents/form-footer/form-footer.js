@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import FooterButtons from '../../../../ocean-components/footer-buttons/footer-buttons';
-import FormLoader from '../../../../ocean-components/footer-loader/footer-loader';
+// import FormLoader from '../../../../ocean-components/footer-loader/footer-loader';
 
 // import i18n from 'utils/i18n/i18n';
 

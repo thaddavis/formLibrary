@@ -94,7 +94,7 @@ export function resetValues(values, field) {
 
 }
 
-export function buildTouchedObjectWithEveryValueSetToTrue(values) {
+export function buildTouchedObjectWithEveryValueSetToBoolean(values, bool) {
   
   var touchedObject = {};
   
@@ -103,7 +103,7 @@ export function buildTouchedObjectWithEveryValueSetToTrue(values) {
       Object.prototype.toString.call(val) !== '[object Array]' &&
       Object.prototype.toString.call(val) !== '[object Object]'
     ) {
-      _.set(touchedObject, path, true);
+      _.set(touchedObject, path, bool);
     } else if (isNormalInteger(Object.keys(val)[0])) {
       for (let i of Object.keys(val)) {
         recurse(

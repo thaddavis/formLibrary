@@ -28,9 +28,9 @@ export default function FooterButtons(props) {
   );
 }
 
-function getDisabledStatus(style) {
-  return style === 'inactive';
-}
+// function getDisabledStatus(style) {
+//   return style === 'inactive';
+// }
 
 FooterButtons.defaultProps = {
   saveButtonDisable: true,

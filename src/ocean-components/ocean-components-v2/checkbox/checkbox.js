@@ -5,7 +5,7 @@ import classnames from 'classnames';
 
 import CSS from './checkbox.module.sass';
 
-const p = console.log;
+// const p = console.log;
 
 class CheckboxInput extends React.Component {
   constructor(props) {

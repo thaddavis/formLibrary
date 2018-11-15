@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import get from 'lodash/get';
 
 const p = console.log;
 
@@ -27,7 +28,8 @@ class XevoForm extends React.Component {
           onBlur: this.handleOnBlur,
           data: this.props.form ? this.props.form.values : undefined,
           errors: this.props.form ? this.props.form.errors : undefined,
-          touched: this.props.form ? this.props.form.touched : undefined
+          touched: this.props.form ? this.props.form.touched : undefined,
+          value: this.props.form ? (this.props.form.values ? get(this.props.form.values, child.props.formKey) : undefined) : undefined,
         })
       } else if (child.props.children) {
         return React.cloneElement(child, {
@@ -39,7 +41,8 @@ class XevoForm extends React.Component {
           onBlur: this.handleOnBlur,
           data: this.props.form ? this.props.form.values : undefined,
           errors: this.props.form ? this.props.form.errors : undefined,
-          touched: this.props.form ? this.props.form.touched : undefined
+          touched: this.props.form ? this.props.form.touched : undefined,
+          value: this.props.form ? (this.props.form.values ? get(this.props.form.values, child.props.formKey) : undefined) : undefined,
         })
       } else {
         return React.cloneElement(child, {})
@@ -97,15 +100,9 @@ class XevoForm extends React.Component {
 }
 
 function mapStateToProps(state, ownProps) {
-
-  p('mapStateToProps');
-  p(state);
-  p(ownProps);
-
   return {
     form: state.form[ownProps.formId]
   };
-
 }
 
 function mapDispatchToProps(dispatch) {

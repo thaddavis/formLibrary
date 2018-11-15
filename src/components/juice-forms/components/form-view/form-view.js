@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+// import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 
 import FormFooter from '../form-footer/form-footer';
@@ -122,7 +122,6 @@ export default function formViewHOC({
       return (
         <div className={CSS.modalHeader}>
           <span
-            role="landmark"
             tabIndex={0}
             aria-label={backText}
             // onKeyDown={onKey('13 32', this.goBack, false)}
@@ -136,7 +135,6 @@ export default function formViewHOC({
             </span>
           </span>
           <h1
-            role="heading"
             tabIndex={0}
             aria-label={this.props.titleOverride || this.props.title}
             className={`${CSS.headerTitle} ${CSS.center}`}>

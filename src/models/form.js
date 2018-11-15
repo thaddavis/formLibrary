@@ -1,7 +1,7 @@
 import instanceOfAjv from '../helpers/instantiateAjv';
 import {
   assign, 
-  buildTouchedObjectWithEveryValueSetToTrue,
+  buildTouchedObjectWithEveryValueSetToBoolean,
   groupErrors,
   prepareValues,
   resetValues,
@@ -24,7 +24,6 @@ function performValidationAndGroupErrors(payload) {
 }
 
 function generateErrorsObjectForForm(payload) {
-  p('generateErrorsObjectForForm')
   payload.values = payload.values || {};
   assign(payload.values, payload.field, payload.value);
   let preparedObject = prepareValues(payload.values, payload.field);
@@ -47,7 +46,7 @@ export default {
             [payload.formId]: {
               valid: false,
               values: payload.values,
-              touched: {},
+              touched: payload.touched,
               errors: {}
             }
           }
@@ -110,13 +109,14 @@ export default {
         async reset(payload, rootState) {
 
           p('******* reset *******');
-          
           let resetValuesRootField;
           if ( Object.prototype.toString.call(payload.values) === '[object Array]') { resetValuesRootField = "0"; } 
           else { resetValuesRootField = ""; }
 
           payload.values = resetValues(payload.values, resetValuesRootField);
-
+          let touched = buildTouchedObjectWithEveryValueSetToBoolean(payload.values, true);
+          payload.touched = touched
+          
           dispatch.form.resetForm(payload);
           return Promise.resolve();
 
@@ -124,7 +124,7 @@ export default {
         async validateForm(payload, rootState) {
           performValidationAndGroupErrors(payload);
 
-          let touched = buildTouchedObjectWithEveryValueSetToTrue(payload.values);
+          let touched = buildTouchedObjectWithEveryValueSetToBoolean(payload.values, true);
           payload.touched = touched
 
           dispatch.form.setValidationState(payload)

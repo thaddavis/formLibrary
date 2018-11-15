@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 import JuiceForm from '../../juice-form';
 import { TextInput } from '../../../ocean-components/better-components'
-import emergencyContactsSchema from '../../../schemas/emergency-contact-schema.json';
-import { prepareValues } from '../../../helpers/helpersForAjv';
+// import emergencyContactsSchema from '../../../schemas/emergency-contact-schema.json';
+// import { prepareValues } from '../../../helpers/helpersForAjv';
 
-const p = console.log;
+// const p = console.log;
 
 const uiSchema = {
   type: 'object',
@@ -31,9 +31,6 @@ const uiSchema = {
 };
 
 class EditEmergencyContactForm extends JuiceForm {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     return (

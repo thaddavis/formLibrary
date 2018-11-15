@@ -8,7 +8,6 @@
     },
     "name": {
       "type": "string",
-      "minLength": 3,
       "isNotEmpty": true
     },
     "dayPhone": {
@@ -24,7 +23,6 @@
     "relationship": { 
       "type": "string",
       "enum": [
-        "",
         "Dependent", 
         "Sibling", 
         "Parent", 
